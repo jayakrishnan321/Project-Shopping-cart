@@ -10,5 +10,8 @@
   "author": "",
   "license": "ISC",
   "type": "commonjs",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "multer": "^2.0.1"
+  }
 }

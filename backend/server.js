@@ -7,11 +7,16 @@ const path=require('path')
 const app=express()
 
 const adminRoutes=require('./routes/adminRoutes')
+const productRoutes = require("./routes/productRoutes");
 
 app.use(cors())
 app.use(express.json())
+app.use("/uploads", express.static("uploads")); // Access images via /uploads/filename.jpg
+
 
 app.use("/api/admin", adminRoutes);
+app.use("/api/products", productRoutes);
+
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected"))
