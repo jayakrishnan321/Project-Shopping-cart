@@ -1,7 +1,7 @@
 const Admin = require("../models/Admin");
 const bcrypt = require("bcryptjs");
 const { sendOTP } = require("../utils/sendOTP");
-
+const jwt=require('jsonwebtoken')
 const otpStore = {}; // Use Redis in production
 
 const registerAdmin = async (req, res) => {
@@ -41,8 +41,24 @@ const verifyOTP = async (req, res) => {
 
   res.status(201).json({ message: "Admin registered successfully" });
 };
+const loginAdmin=async(req,res)=>{
+    const {email,password}=req.body
+    const admin= await Admin.findOne({email:email})
+    if (!admin) return res.status(400).json({ message: 'Invalid credentials' });
+    const isMatch= await bcrypt.compare(password,admin.password);
+    if (!isMatch) return res.status(400).json({ message: 'enter correct password' });
+     const token = jwt.sign({ id: admin._id, email: admin.email, name: admin.name }, process.env.JWT_SECRET, {
+    expiresIn: '1h'
+  });
+  res.status(200).json({
+    message: 'Login successful',
+    token,
+
+  });
+}
 
 module.exports = {
   registerAdmin,
   verifyOTP,
+  loginAdmin
 };
