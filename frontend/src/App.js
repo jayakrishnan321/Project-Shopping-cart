@@ -1,10 +1,17 @@
-
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import AdminRegister from './pages/AdminRegister';
+import OTPVerify from './pages/OTPVerify';
+import AdminLogin from './pages/AdminLogin';
 
 function App() {
   return (
-    <div className="text-center text-blue-500 text-2xl font-bold">
-      Hello Tailwind!
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/admin/register" element={<AdminRegister />} />
+        <Route path="/admin/verify-otp" element={<OTPVerify />} />
+        <Route path='/admin/login' element={<AdminLogin/>}/>
+      </Routes>
+    </Router>
   );
 }
 

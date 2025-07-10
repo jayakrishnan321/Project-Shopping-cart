@@ -6,18 +6,17 @@ dotenv.config()
 const path=require('path')
 const app=express()
 
+const adminRoutes=require('./routes/adminRoutes')
+
 app.use(cors())
 app.use(express.json())
 
+app.use("/api/admin", adminRoutes);
 
-mongoose.connect(process.env.MONGO_URI,{
-    useNewUrlParser: true,
-  useUnifiedTopology: true
-}).then(()=>{
-    console.log('mongodb connected succesful')
-}).catch((err)=>{
-    console.log(err)
-})
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error("MongoDB connection error:", err));
+
 
 const PORT=5000
 app.listen(PORT,()=>{
