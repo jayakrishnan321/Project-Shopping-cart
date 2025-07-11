@@ -8,8 +8,7 @@ const Admindashboard = () => {
   const navigate = useNavigate();
 
   const { items, loading } = useSelector((state) => state.product);
-  const { adminInfo } = useSelector((state) => state.auth); // Assuming login data is here
-
+  const { adminInfo } = useSelector((state) => state.auth); 
   useEffect(() => {
     dispatch(getProducts());
   }, [dispatch]);
@@ -26,14 +25,18 @@ const Admindashboard = () => {
             </button>
           </div>
         )}
-
-        {/* Add Product Button */}
-        <button
+       {adminInfo&&
+        (adminInfo.name)&&
+             <button
           onClick={() => navigate("/admin/add-product")}
           className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
         >
           Add Product
         </button>
+        
+        
+       }
+        
       </div>
 
       <h1 className="text-2xl font-semibold mb-4">All Products</h1>

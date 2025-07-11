@@ -2,26 +2,48 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { setAdminInfo } from '../redux/slices/authSlice'; // ✅ adjust path if needed
+import { jwtDecode } from 'jwt-decode';
+
 function AdminLogin() {
     const navigate = useNavigate()
+    const dispatch = useDispatch();
+
   const [form, setForm] = useState({
     email: '',
     password: ''
   });
-      const handleLogin = async () => {
+    const handleLogin = async () => {
     if (!form.email || !form.password) {
       alert('Please fill all fields');
       return;
     }
+
     try {
       const res = await axios.post('http://localhost:5000/api/admin/login', form);
       alert(res.data.message);
-      sessionStorage.setItem('token', res.data.token);
+
+      const token = res.data.token;
+      sessionStorage.setItem('token', token);
+
+      // ✅ Decode token to get admin data
+      const decoded = jwtDecode(token);
+      // decoded might contain: { name, email, id, iat, exp }
+
+      // ✅ Dispatch to Redux
+      dispatch(setAdminInfo({
+        name: decoded.name,
+        email: decoded.email,
+        token: token,
+      }));
+
       navigate('/admin/dashboard');
     } catch (err) {
       alert(err.response?.data?.message || 'Login failed');
     }
   };
+
      const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
