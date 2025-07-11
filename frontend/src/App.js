@@ -4,6 +4,7 @@ import OTPVerify from './pages/OTPVerify';
 import AdminLogin from './pages/AdminLogin';
 import Admindashboard from './pages/Admindashboard';
 import AddProduct from './pages/AddProduct';
+import AdminChangePassword from './pages/AdminChangePassword';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path='/admin/login' element={<AdminLogin />} />
         <Route path="/admin/dashboard" element={<Admindashboard />} />
         <Route path="/admin/add-product" element={<AddProduct/>} />
+        <Route path='/admin/change-password' element={<AdminChangePassword/>}/>
 
       </Routes>
     </Router>

@@ -1,5 +1,20 @@
-import { createSlice } from "@reduxjs/toolkit";
-
+import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
+import API from "../../api";
+export const ChangePassword = createAsyncThunk(
+  "admin/change",
+  async ({ email, oldPassword, newPassword }, thunkAPI) => {
+    try {
+      const res = await API.post(`/admin/changepassword/${email}`, {
+        oldPassword,
+        newPassword,
+      });
+      
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
 const initialState = {
   adminInfo: JSON.parse(sessionStorage.getItem("adminInfo")) || null,
 };

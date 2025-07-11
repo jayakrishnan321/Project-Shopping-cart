@@ -1,7 +1,7 @@
 const Admin = require("../models/Admin");
 const bcrypt = require("bcryptjs");
 const { sendOTP } = require("../utils/sendOTP");
-const jwt=require('jsonwebtoken')
+const jwt=require('jsonwebtoken');
 const otpStore = {}; // Use Redis in production
 
 const registerAdmin = async (req, res) => {
@@ -60,9 +60,40 @@ const loginAdmin=async(req,res)=>{
 
   });
 }
+const ChangePassword = async (req, res) => {
+  const { email } = req.params;
+  const { oldPassword, newPassword } = req.body;
+
+  try {
+    // 1. Find the admin
+    const admin = await Admin.findOne({ email });
+    if (!admin) {
+      return res.status(404).json({ message: "Admin not found" });
+    }
+
+    // 2. Compare old password
+    const isMatch = await bcrypt.compare(oldPassword, admin.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Old password is incorrect" });
+    }
+
+    // 3. Hash new password
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+
+    // 4. Update and save
+    admin.password = hashedNewPassword;
+    await admin.save();
+
+    res.status(200).json({ message: "Password changed successfully" });
+  } catch (err) {
+    console.error("Error changing password:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
 module.exports = {
   registerAdmin,
   verifyOTP,
-  loginAdmin
+  loginAdmin,
+  ChangePassword
 };
