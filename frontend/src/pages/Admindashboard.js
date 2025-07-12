@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getProducts, deleteProduct } from "../redux/slices/productSlice";
-import { logoutAdmin, addprofile,setAdminInfo } from "../redux/slices/authSlice";
+import { logoutAdmin, addprofile, setAdminInfo } from "../redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
@@ -50,31 +50,31 @@ const Admindashboard = () => {
     setImageFile(e.target.files[0]);
   };
   const handleAddimage = async () => {
-  if (!imageFile) {
-    alert("Please select an image");
-    return;
-  }
+    if (!imageFile) {
+      alert("Please select an image");
+      return;
+    }
 
-  const data = new FormData();
-  data.append("image", imageFile);
+    const data = new FormData();
+    data.append("image", imageFile);
 
-  try {
-    const result = await dispatch(addprofile({ data, email: adminInfo.email })).unwrap();
+    try {
+      const result = await dispatch(addprofile({ data, email: adminInfo.email })).unwrap();
 
-    alert(result.message);
+      alert(result.message);
 
-    // ✅ Update Redux with new image + keep old token
-    dispatch(setAdminInfo({
-      ...adminInfo,
-      image: result.admin.image,
-    }));
+      // ✅ Update Redux with new image + keep old token
+      dispatch(setAdminInfo({
+        ...adminInfo,
+        image: result.admin.image,
+      }));
 
-    setImageFile(null); // optional reset
-  } catch (err) {
-    alert("Image upload failed");
-    console.error(err);
-  }
-};
+      setImageFile(null); // optional reset
+    } catch (err) {
+      alert("Image upload failed");
+      console.error(err);
+    }
+  };
 
 
   return (
@@ -99,26 +99,34 @@ const Admindashboard = () => {
 
             {dropdownOpen && (
               <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow z-10">
-                {/* Admin Profile Image Preview */}
-                {adminInfo?.image && (
-                  <div className="flex flex-col items-center p-2">
-                    <img
-                      src={`http://localhost:5000${adminInfo.image}`}
-                      alt="Admin"
-                      className="w-20 h-20 rounded-full object-cover border mb-2"
-                    />
-                    <span className="text-sm text-gray-600">Current Image</span>
-                  </div>
-                )}
+                <div className="flex flex-col items-center p-2 relative group">
+                  {/* Profile Image */}
+                  <img
+                    src={`http://localhost:5000${adminInfo.image}`}
+                    alt="No Profile"
+                    className="w-20 h-20 rounded-full object-cover border"
+                  />
 
-                {/* Image Upload Input */}
-                <input
-                  type="file"
-                  name="image"
-                  accept="image/*"
-                  onChange={handleChange}
-                  className="w-full p-1 border border-black rounded-md mt-1"
-                />
+                  {/* Edit Icon Overlay (shown on hover) */}
+                  <button
+                    onClick={() => document.getElementById("profileImageInput").click()}
+                    className="absolute bottom-2 right-2 bg-white p-1 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition"
+                    title="Change Profile Picture"
+                  >
+                    ✏️
+                  </button>
+
+                  {/* File Input (hidden) */}
+                  <input
+                    type="file"
+                    id="profileImageInput"
+                    accept="image/*"
+                    onChange={handleChange}
+                    className="hidden"
+                  />
+
+                  <span className="text-sm text-gray-600 mt-1">Current Image</span>
+                </div>
 
                 {/* Upload Button (label changes based on image existence) */}
                 <button
