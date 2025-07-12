@@ -12,7 +12,6 @@ const AdminRegister = () => {
     confirmPassword: '',
     secretKey: ''
   });
-
   const [message, setMessage] = useState('');
 
   const handleChange = (e) => {

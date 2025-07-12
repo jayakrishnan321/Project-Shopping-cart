@@ -6,14 +6,12 @@ import { useNavigate } from "react-router-dom";
 const AddProduct = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
     name: "",
     description: "",
     price: "",
     category: "",
   });
-
   const [imageFile, setImageFile] = useState(null);
 
   const handleChange = (e) => {
@@ -29,14 +27,12 @@ const AddProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
     const data = new FormData();
     data.append("name", formData.name);
     data.append("description", formData.description);
     data.append("price", formData.price);
     data.append("category", formData.category);
-    data.append("image", imageFile); 
-
+    data.append("image", imageFile);
     await dispatch(addProduct(data));
     navigate("/admin/dashboard");
   };
@@ -49,9 +45,7 @@ const AddProduct = () => {
         <input name="description" type="text" placeholder="Description" onChange={handleChange} required className="w-full p-2 border rounded" />
         <input name="price" type="number" placeholder="Price" onChange={handleChange} required className="w-full p-2 border rounded" />
         <input name="category" type="text" placeholder="Category" onChange={handleChange} required className="w-full p-2 border rounded" />
-        
         <input type="file" name="image" onChange={handleImageChange} required className="w-full p-2 border rounded" />
-        
         <button type="submit" className="w-full bg-green-600 text-white p-2 rounded hover:bg-green-700">Add Product</button>
       </form>
     </div>

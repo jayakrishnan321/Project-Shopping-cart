@@ -7,35 +7,30 @@ import { setAdminInfo } from '../redux/slices/authSlice'; // ✅ adjust path if 
 import { jwtDecode } from 'jwt-decode';
 
 function AdminLogin() {
-    const navigate = useNavigate()
-    const dispatch = useDispatch();
-
+  const navigate = useNavigate()
+  const dispatch = useDispatch();
   const [form, setForm] = useState({
     email: '',
     password: ''
   });
-    const handleLogin = async () => {
+
+  const handleLogin = async () => {
     if (!form.email || !form.password) {
       alert('Please fill all fields');
       return;
     }
-
     try {
       const res = await axios.post('http://localhost:5000/api/admin/login', form);
       alert(res.data.message);
 
       const token = res.data.token;
       sessionStorage.setItem('token', token);
-
-      // ✅ Decode token to get admin data
       const decoded = jwtDecode(token);
-      // decoded might contain: { name, email, id, iat, exp }
 
-      // ✅ Dispatch to Redux
       dispatch(setAdminInfo({
         name: decoded.name,
         email: decoded.email,
-        image:decoded.image,
+        image: decoded.image,
         token: token,
       }));
 
@@ -45,7 +40,7 @@ function AdminLogin() {
     }
   };
 
-     const handleChange = (e) => {
+  const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
   return (

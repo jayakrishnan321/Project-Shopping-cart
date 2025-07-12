@@ -20,12 +20,24 @@ export const addprofile = createAsyncThunk(
   async ({ data, email }, thunkAPI) => {
     try {
       const res = await API.post(`/admin/upload/${email}`, data);
-      return res.data; // contains { message: "...", admin: {...} }
+      return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.message);
     }
   }
 );
+export const removeProfile = createAsyncThunk(
+  "profile/remove",
+  async (email, thunkAPI) => {
+    try {
+      const res = await API.put(`/admin/remove-image/${email}`);
+      return res.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err.response.data.message);
+    }
+  }
+);
+
 
 
 const initialState = {

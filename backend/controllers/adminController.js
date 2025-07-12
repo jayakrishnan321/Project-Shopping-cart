@@ -1,9 +1,10 @@
 const Admin = require("../models/Admin");
 const bcrypt = require("bcryptjs");
 const { sendOTP } = require("../utils/sendOTP");
-const jwt=require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 const path = require("path");
-const otpStore = {}; // Use Redis in production
+
+const otpStore = {};
 
 const registerAdmin = async (req, res) => {
   const { name, email, phone, password, confirmPassword, secretKey } = req.body;
@@ -22,7 +23,7 @@ const registerAdmin = async (req, res) => {
   otpStore[email] = {
     otp,
     data: { name, email, phone, password },
-    expires: Date.now() + 300000, // 5 mins
+    expires: Date.now() + 300000,
   };
 
   await sendOTP(email, otp);
@@ -33,28 +34,30 @@ const verifyOTP = async (req, res) => {
   const { email, otp } = req.body;
 
   const record = otpStore[email];
+
   if (!record || record.otp !== otp || Date.now() > record.expires)
     return res.status(400).json({ message: "Invalid or expired OTP" });
 
   const hashedPassword = await bcrypt.hash(record.data.password, 10);
+
   await Admin.create({ ...record.data, password: hashedPassword });
   delete otpStore[email];
 
   res.status(201).json({ message: "Admin registered successfully" });
 };
-const loginAdmin=async(req,res)=>{
-    const {email,password}=req.body
+const loginAdmin = async (req, res) => {
+  const { email, password } = req.body
 
-    const admin= await Admin.findOne({email:email})
-    if (!admin) return res.status(400).json({ message: 'Invalid credentials' });
+  const admin = await Admin.findOne({ email: email })
+  if (!admin) return res.status(400).json({ message: 'Invalid credentials' });
 
-    const isMatch= await bcrypt.compare(password,admin.password);
-    if (!isMatch) return res.status(400).json({ message: 'enter correct password' });
+  const isMatch = await bcrypt.compare(password, admin.password);
+  if (!isMatch) return res.status(400).json({ message: 'enter correct password' });
 
-     const token = jwt.sign({ id: admin._id, email: admin.email, name: admin.name,image:admin.image }, process.env.JWT_SECRET, {
+  const token = jwt.sign({ id: admin._id, email: admin.email, name: admin.name, image: admin.image }, process.env.JWT_SECRET, {
     expiresIn: '1h'
   });
-  
+
   res.status(200).json({
     message: 'Login successful',
     token,
@@ -66,22 +69,18 @@ const ChangePassword = async (req, res) => {
   const { oldPassword, newPassword } = req.body;
 
   try {
-    // 1. Find the admin
     const admin = await Admin.findOne({ email });
     if (!admin) {
       return res.status(404).json({ message: "Admin not found" });
     }
 
-    // 2. Compare old password
     const isMatch = await bcrypt.compare(oldPassword, admin.password);
     if (!isMatch) {
       return res.status(400).json({ message: "Old password is incorrect" });
     }
 
-    // 3. Hash new password
     const hashedNewPassword = await bcrypt.hash(newPassword, 10);
 
-    // 4. Update and save
     admin.password = hashedNewPassword;
     await admin.save();
 
@@ -96,11 +95,10 @@ const addimage = async (req, res) => {
     const email = req.params.email;
     const imagePath = req.file ? `/profile/${req.file.filename}` : "";
 
-    // 🔍 Find and update the admin by email
     const admin = await Admin.findOneAndUpdate(
       { email },
       { image: imagePath },
-      { new: true } // Return the updated admin document
+      { new: true }
     );
 
     if (!admin) {
@@ -113,11 +111,31 @@ const addimage = async (req, res) => {
     res.status(500).json({ message: "Failed to update image" });
   }
 };
+const removeProfileImage = async (req, res) => {
+  try {
+    const email = req.params.email;
+
+    const admin = await Admin.findOneAndUpdate(
+      { email },
+      { image: "" },
+      { new: true }
+    );
+
+    if (!admin) return res.status(404).json({ message: "Admin not found" });
+
+    res.status(200).json({ message: "Profile image removed", admin });
+  } catch (error) {
+    console.error("Remove image error:", error);
+    res.status(500).json({ message: "Failed to remove profile image" });
+  }
+};
+
 
 module.exports = {
   registerAdmin,
   verifyOTP,
   loginAdmin,
   ChangePassword,
-  addimage
+  addimage,
+  removeProfileImage
 };

@@ -10,6 +10,7 @@ function AdminChangePassword() {
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const { adminInfo } = useSelector((state) => state.auth);
+
     useEffect(() => {
         if (!adminInfo || !adminInfo.token) {
             navigate("/admin/login");

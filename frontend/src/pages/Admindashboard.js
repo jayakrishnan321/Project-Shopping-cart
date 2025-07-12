@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getProducts, deleteProduct } from "../redux/slices/productSlice";
-import { logoutAdmin, addprofile, setAdminInfo } from "../redux/slices/authSlice";
+import { logoutAdmin, addprofile, setAdminInfo, removeProfile } from "../redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
@@ -9,9 +9,9 @@ const Admindashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [imageFile, setImageFile] = useState(null)
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const { items, loading } = useSelector((state) => state.product);
   const { adminInfo } = useSelector((state) => state.auth);
-  console.log(adminInfo.image)
 
   useEffect(() => {
     if (!adminInfo || !adminInfo.token) {
@@ -25,12 +25,13 @@ const Admindashboard = () => {
       }
     }
   }, [adminInfo, dispatch, navigate]);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+
 
   const handleLogout = () => {
     dispatch(logoutAdmin());
     navigate("/admin/login");
   };
+
   const handleEdit = (id) => {
     navigate(`/admin/edit-product/${id}`);
   };
@@ -46,18 +47,18 @@ const Admindashboard = () => {
       }
     }
   };
+
   const handleChange = (e) => {
     setImageFile(e.target.files[0]);
   };
+
   const handleAddimage = async () => {
     if (!imageFile) {
       alert("Please select an image");
       return;
     }
-
     const data = new FormData();
     data.append("image", imageFile);
-
     try {
       const result = await dispatch(addprofile({ data, email: adminInfo.email })).unwrap();
 
@@ -76,18 +77,30 @@ const Admindashboard = () => {
     }
   };
 
+  const handleRemoveImage = async () => {
+    if (window.confirm("Are you sure you want to remove the profile image?")) {
+      try {
+        const result = await dispatch(removeProfile(adminInfo.email)).unwrap();
+        alert(result.message);
+
+        // ✅ Update Redux and session storage
+        dispatch(setAdminInfo({
+          ...adminInfo,
+          image: "", // clear image from state
+        }));
+      } catch (err) {
+        alert("Failed to remove profile image");
+        console.error(err);
+      }
+    }
+  };
 
   return (
     <div className="p-4 relative">
-      {/* Top Row */}
       <div className="flex justify-between items-center mb-6 relative">
-
-        {/* Centered Heading */}
         <h1 className="text-2xl font-semibold absolute left-1/2 transform -translate-x-1/2">
           All Products
         </h1>
-
-        {/* Admin Name & Dropdown */}
         {adminInfo && (
           <div className="relative ml-auto">
             <button
@@ -96,27 +109,21 @@ const Admindashboard = () => {
             >
               {adminInfo.name}
             </button>
-
             {dropdownOpen && (
               <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow z-10">
                 <div className="flex flex-col items-center p-2 relative group">
-                  {/* Profile Image */}
                   <img
                     src={`http://localhost:5000${adminInfo.image}`}
                     alt="No Profile"
                     className="w-20 h-20 rounded-full object-cover border"
                   />
-
-                  {/* Edit Icon Overlay (shown on hover) */}
                   <button
                     onClick={() => document.getElementById("profileImageInput").click()}
                     className="absolute bottom-2 right-2 bg-white p-1 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition"
-                    title="Change Profile Picture"
+                    title={adminInfo?.image ? "Update Profile Picture" : "Add Profile Picture"}
                   >
-                    ✏️
+                    {adminInfo?.image ? "🖊️" : "➕"}
                   </button>
-
-                  {/* File Input (hidden) */}
                   <input
                     type="file"
                     id="profileImageInput"
@@ -124,18 +131,21 @@ const Admindashboard = () => {
                     onChange={handleChange}
                     className="hidden"
                   />
-
+                  <button
+                    onClick={handleRemoveImage}
+                    className="absolute bottom-10 right-2 bg-white p-1 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition"
+                    title="Remove Profile Picture"
+                  >
+                    🗑️
+                  </button>
                   <span className="text-sm text-gray-600 mt-1">Current Image</span>
                 </div>
-
-                {/* Upload Button (label changes based on image existence) */}
                 <button
                   onClick={() => handleAddimage()}
                   className="block w-full text-left px-4 py-2 hover:bg-gray-100"
                 >
                   {adminInfo?.image ? "Update Image" : "Add Image"}
                 </button>
-
                 <button
                   onClick={() => {
                     setDropdownOpen(false);
@@ -153,7 +163,6 @@ const Admindashboard = () => {
                 </button>
               </div>
             )}
-
             <div className="mt-3">
               <button
                 onClick={() => navigate("/admin/add-product")}
@@ -165,8 +174,6 @@ const Admindashboard = () => {
           </div>
         )}
       </div>
-
-      {/* Products Grid */}
       {loading ? (
         <p>Loading...</p>
       ) : (

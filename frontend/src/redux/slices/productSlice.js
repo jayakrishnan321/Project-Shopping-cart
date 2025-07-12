@@ -1,17 +1,17 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import API from "../../api";
 
-// Add a new product
 export const addProduct = createAsyncThunk("product/add", async (productData) => {
   const res = await API.post("/products", productData);
   return res.data.product;
 });
 
-// Get all products
+
 export const getProducts = createAsyncThunk("product/getAll", async () => {
   const res = await API.get("/products");
   return res.data;
 });
+
 export const deleteProduct = createAsyncThunk(
   "product/delete",
   async (id, thunkAPI) => {

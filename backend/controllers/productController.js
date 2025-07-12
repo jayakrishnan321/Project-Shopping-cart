@@ -5,7 +5,6 @@ const addProduct = async (req, res) => {
   try {
     const { name, description, price, category } = req.body;
     const imagePath = req.file ? `/uploads/${req.file.filename}` : "";
-
     const product = new Product({
       name,
       description,
