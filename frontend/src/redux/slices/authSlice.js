@@ -15,6 +15,19 @@ export const ChangePassword = createAsyncThunk(
     }
   }
 );
+export const addprofile = createAsyncThunk(
+  "profile/image",
+  async ({ data, email }, thunkAPI) => {
+    try {
+      const res = await API.post(`/admin/upload/${email}`, data);
+      return res.data; // contains { message: "...", admin: {...} }
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+
 const initialState = {
   adminInfo: JSON.parse(sessionStorage.getItem("adminInfo")) || null,
 };

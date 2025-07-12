@@ -12,6 +12,7 @@ const productRoutes = require("./routes/productRoutes");
 app.use(cors())
 app.use(express.json())
 app.use("/uploads", express.static("uploads")); // Access images via /uploads/filename.jpg
+app.use('/profile', express.static('profile'));
 
 
 app.use("/api/admin", adminRoutes);

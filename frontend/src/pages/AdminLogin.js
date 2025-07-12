@@ -35,6 +35,7 @@ function AdminLogin() {
       dispatch(setAdminInfo({
         name: decoded.name,
         email: decoded.email,
+        image:decoded.image,
         token: token,
       }));
 

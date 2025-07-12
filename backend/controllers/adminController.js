@@ -2,6 +2,7 @@ const Admin = require("../models/Admin");
 const bcrypt = require("bcryptjs");
 const { sendOTP } = require("../utils/sendOTP");
 const jwt=require('jsonwebtoken');
+const path = require("path");
 const otpStore = {}; // Use Redis in production
 
 const registerAdmin = async (req, res) => {
@@ -50,7 +51,7 @@ const loginAdmin=async(req,res)=>{
     const isMatch= await bcrypt.compare(password,admin.password);
     if (!isMatch) return res.status(400).json({ message: 'enter correct password' });
 
-     const token = jwt.sign({ id: admin._id, email: admin.email, name: admin.name }, process.env.JWT_SECRET, {
+     const token = jwt.sign({ id: admin._id, email: admin.email, name: admin.name,image:admin.image }, process.env.JWT_SECRET, {
     expiresIn: '1h'
   });
   
@@ -90,10 +91,33 @@ const ChangePassword = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+const addimage = async (req, res) => {
+  try {
+    const email = req.params.email;
+    const imagePath = req.file ? `/profile/${req.file.filename}` : "";
+
+    // 🔍 Find and update the admin by email
+    const admin = await Admin.findOneAndUpdate(
+      { email },
+      { image: imagePath },
+      { new: true } // Return the updated admin document
+    );
+
+    if (!admin) {
+      return res.status(404).json({ message: "Admin not found" });
+    }
+
+    res.status(200).json({ message: "Profile image updated", admin });
+  } catch (error) {
+    console.error("Add image error:", error);
+    res.status(500).json({ message: "Failed to update image" });
+  }
+};
 
 module.exports = {
   registerAdmin,
   verifyOTP,
   loginAdmin,
-  ChangePassword
+  ChangePassword,
+  addimage
 };
