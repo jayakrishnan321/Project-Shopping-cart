@@ -5,6 +5,7 @@ import AdminLogin from './pages/AdminLogin';
 import Admindashboard from './pages/Admindashboard';
 import AddProduct from './pages/AddProduct';
 import AdminChangePassword from './pages/AdminChangePassword';
+import AdminEditProduct from './pages/AdminEditProduct';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/admin/dashboard" element={<Admindashboard />} />
         <Route path="/admin/add-product" element={<AddProduct/>} />
         <Route path='/admin/change-password' element={<AdminChangePassword/>}/>
+        <Route path='/admin/edit-product/:id'  element={<AdminEditProduct/>}/>
 
       </Routes>
     </Router>

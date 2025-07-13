@@ -5,7 +5,11 @@ const adminSchema = new mongoose.Schema({
   email: { type: String, unique: true },
   phone: String,
   password: String,
-  image: { type: String, required: true },
+ image: {
+  type: String,
+  default: "",
+  required: false,
+},
   createdAt: { type: Date, default: Date.now },
 });
 

@@ -23,6 +23,27 @@ export const deleteProduct = createAsyncThunk(
     }
   }
 );
+export const geteditproduct = createAsyncThunk('product/edit', async (id, thunkAPI) => {
+  try {
+    const res = await API.get(`/products/${id}`);
+    return res.data;
+  } catch (err) {
+    return thunkAPI.rejectWithValue(err.response?.data?.message || 'Failed to fetch product');
+  }
+});
+export const editproduct = createAsyncThunk(
+  'product/edit',
+  async ({ id, data }, thunkAPI) => {
+    try {
+      const res = await API.put(`/products/edit/${id}`, data);
+      return res.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err.response?.data?.message || 'Failed to update product');
+    }
+  }
+);
+
+
 
 const productSlice = createSlice({
   name: "product",
