@@ -12,6 +12,7 @@ function Userdashboard() {
     const [imageFile, setImageFile] = useState(null)
     const { items, loading } = useSelector((state) => state.product);
     const { userInfo } = useSelector((state) => state.user);
+    console.log(userInfo)
     useEffect(() => {
         if (!userInfo || !userInfo.token) {
             navigate('/user/login');

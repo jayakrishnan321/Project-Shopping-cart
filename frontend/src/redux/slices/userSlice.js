@@ -40,7 +40,7 @@ export const changePassword = createAsyncThunk(
 
 
 const initialState = {
-  userInfo: null,
+  userInfo: JSON.parse(sessionStorage.getItem("userInfo")) || null,
 };
 
 const userSlice = createSlice({
@@ -49,9 +49,11 @@ const userSlice = createSlice({
   reducers: {
     setUserInfo: (state, action) => {
       state.userInfo = action.payload;
+      sessionStorage.setItem("userInfo", JSON.stringify(action.payload));
     },
     clearUserInfo: (state) => {
       state.userInfo = null;
+      sessionStorage.removeItem("userInfo");
     },
   },
 });
