@@ -62,8 +62,76 @@ const loginUser = async (req, res) => {
 
   });
 }
+const ChangePassword = async (req, res) => {
+  const { email } = req.params;
+  const { oldPassword, newPassword } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "Admin not found" });
+    }
+
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Old password is incorrect" });
+    }
+
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+
+    user.password = hashedNewPassword;
+    await user.save();
+
+    res.status(200).json({ message: "Password changed successfully" });
+  } catch (err) {
+    console.error("Error changing password:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+const addimage = async (req, res) => {
+  try {
+    const email = req.params.email;
+    const imagePath = req.file ? `/profile/${req.file.filename}` : "";
+
+    const user = await User.findOneAndUpdate(
+      { email },
+      { image: imagePath },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "Admin not found" });
+    }
+
+    res.status(200).json({ message: "Profile image updated", user });
+  } catch (error) {
+    console.error("Add image error:", error);
+    res.status(500).json({ message: "Failed to update image" });
+  }
+};
+const removeProfileImage = async (req, res) => {
+  try {
+    const email = req.params.email;
+
+    const user = await User.findOneAndUpdate(
+      { email },
+      { image: "" },
+      { new: true }
+    );
+
+    if (!user) return res.status(404).json({ message: "Admin not found" });
+
+    res.status(200).json({ message: "Profile image removed", user });
+  } catch (error) {
+    console.error("Remove image error:", error);
+    res.status(500).json({ message: "Failed to remove profile image" });
+  }
+};
 module.exports={
     registerUser,
     verifyOTP,
-    loginUser
+    loginUser,
+    addimage,
+    removeProfileImage,
+    ChangePassword
 }

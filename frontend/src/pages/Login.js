@@ -42,6 +42,7 @@ function Login({ role }) {
       dispatch(setUserInfo({
         name: decoded.name,
         email: decoded.email,
+        image: decoded.image,
         token: token,
       }));
     }
