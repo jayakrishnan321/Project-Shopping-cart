@@ -7,9 +7,7 @@ function AdminEditProduct() {
     const { id } = useParams();
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
     const { adminInfo } = useSelector((state) => state.auth);
-
     const [formData, setFormData] = useState({
         name: '',
         description: '',
@@ -17,7 +15,6 @@ function AdminEditProduct() {
         category: '',
         image: null,
     });
-
     const [prevImage, setPrevImage] = useState('');
 
     useEffect(() => {
@@ -41,11 +38,9 @@ function AdminEditProduct() {
                 }
             }
         };
-
         fetchProduct();
     }, [adminInfo, dispatch, id, navigate]);
 
-    // Handle input change
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({
@@ -54,7 +49,7 @@ function AdminEditProduct() {
         }));
     };
 
-    // Handle file input change
+
     const handleFileChange = (e) => {
         setFormData((prev) => ({
             ...prev,
@@ -134,7 +129,6 @@ function AdminEditProduct() {
                 onChange={handleFileChange}
                 className="mb-4"
             />
-
             <button
                 onClick={handleUpdate}
                 className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"

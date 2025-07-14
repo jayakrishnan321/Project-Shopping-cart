@@ -16,5 +16,13 @@ const sendOTP = async (email, otp) => {
     text: `Your OTP is: ${otp}`,
   });
 };
+const usersendOTP=async(email,otp)=>{
+  await transporter.sendMail({
+    from:`"shopping cart" <${process.env.EMAIL_USER}>`,
+    to:email,
+    subject:"OTP Verification",
+    text:`your otp is: ${otp}`,
+  });
+}
 
-module.exports = { sendOTP }; // ✅ Exported properly for CommonJS
+module.exports = { sendOTP,usersendOTP }; 

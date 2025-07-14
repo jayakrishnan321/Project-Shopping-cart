@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import API from '../api';
 
-const AdminRegister = () => {
+const Register = ({role}) => {
   const navigate = useNavigate();
   const [form, setForm] = useState({
     name: '',
@@ -13,30 +13,37 @@ const AdminRegister = () => {
     secretKey: ''
   });
   const [message, setMessage] = useState('');
-
+  const isAdmin = role === 'admin';
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
-      const res = await API.post('/admin/register', form);
-      setMessage(res.data.message);
-      localStorage.setItem('pendingAdminEmail', form.email);
-      navigate('/admin/verify-otp');
-    } catch (err) {
-      setMessage(err.response?.data?.message || 'Error registering');
-    }
-  };
+  try {
+    const endpoint = isAdmin ? '/admin/register' : '/user/register';
+    const verifyRoute = isAdmin ? '/admin/verify-otp' : '/user/verify-otp';
+
+    const res = await API.post(endpoint, form);
+    setMessage(res.data.message);
+    
+    sessionStorage.setItem(isAdmin ? 'pendingAdminEmail' : 'pendingUserEmail', form.email);
+    navigate(verifyRoute);
+  } catch (err) {
+    setMessage(err.response?.data?.message || 'Error registering');
+  }
+};
+
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
       <form onSubmit={handleSubmit} className="bg-white p-8 rounded shadow-md w-full max-w-md space-y-4">
-        <h2 className="text-2xl font-bold text-center">Admin Register</h2>
-
-        {['name', 'email', 'phone', 'password', 'confirmPassword', 'secretKey'].map((field) => (
+        
+       { isAdmin?<h2 className="text-2xl font-bold text-center">Admin Register</h2>
+        :<h2 className="text-2xl font-bold text-center">User Register</h2>
+       }
+        {['name', 'email', 'phone', 'password', 'confirmPassword', ...(isAdmin ? ['secretKey'] : [])].map((field) => (
           <input
             key={field}
             type={field.toLowerCase().includes('password') ? 'password' : 'text'}
@@ -57,4 +64,4 @@ const AdminRegister = () => {
   );
 };
 
-export default AdminRegister;
+export default Register;

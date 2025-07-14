@@ -8,6 +8,7 @@ const app=express()
 
 const adminRoutes=require('./routes/adminRoutes')
 const productRoutes = require("./routes/productRoutes");
+const userRoutes=require("./routes/userRoutes")
 
 app.use(cors())
 app.use(express.json())
@@ -17,6 +18,7 @@ app.use('/profile', express.static('profile'));
 
 app.use("/api/admin", adminRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/user",userRoutes)
 
 
 mongoose.connect(process.env.MONGO_URI)
