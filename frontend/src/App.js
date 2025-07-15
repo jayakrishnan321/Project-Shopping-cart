@@ -8,6 +8,7 @@ import ChangePasswordcomponent from './pages/ChangePassword';
 import AdminEditProduct from './pages/AdminEditProduct';
 import Userdashboard from './pages/Userdashboard';
 import Userlist from './pages/Userlist';
+import Cart from './pages/Cart';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path='/user/login' element={<Login role='user' />} />
         <Route path='/user/dashboard' element={<Userdashboard/>}/>
         <Route path="/user/change-password" element={<ChangePasswordcomponent role="user" />} />
+        <Route path='/user/cart' element={<Cart/>}/>
       </Routes>
     </Router>
   );

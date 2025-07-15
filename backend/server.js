@@ -9,6 +9,7 @@ const app=express()
 const adminRoutes=require('./routes/adminRoutes')
 const productRoutes = require("./routes/productRoutes");
 const userRoutes=require("./routes/userRoutes")
+const cartRoutes=require("./routes/cartRoutes")
 
 app.use(cors())
 app.use(express.json())
@@ -19,6 +20,7 @@ app.use('/profile', express.static('profile'));
 app.use("/api/admin", adminRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/user",userRoutes)
+app.use("/api/cart",cartRoutes)
 
 
 mongoose.connect(process.env.MONGO_URI)
