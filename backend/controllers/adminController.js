@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const { sendOTP } = require("../utils/sendOTP");
 const jwt = require('jsonwebtoken');
 const path = require("path");
+const User = require("../models/User");
 
 const otpStore = {};
 
@@ -129,6 +130,14 @@ const removeProfileImage = async (req, res) => {
     res.status(500).json({ message: "Failed to remove profile image" });
   }
 };
+const Userlist=async(req,res)=>{
+  try{
+    const users=await User.find()
+    return res.json(users)
+  }catch(err){
+    console.log('cannot fetch user list')
+  }
+}
 
 
 module.exports = {
@@ -137,5 +146,6 @@ module.exports = {
   loginAdmin,
   ChangePassword,
   addimage,
-  removeProfileImage
+  removeProfileImage,
+  Userlist
 };

@@ -7,6 +7,7 @@ import AddProduct from './pages/AddProduct';
 import ChangePasswordcomponent from './pages/ChangePassword';
 import AdminEditProduct from './pages/AdminEditProduct';
 import Userdashboard from './pages/Userdashboard';
+import Userlist from './pages/Userlist';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/admin/add-product" element={<AddProduct/>} />
         <Route path='/admin/change-password' element={<ChangePasswordcomponent role="admin"/>}/>
         <Route path='/admin/edit-product/:id'  element={<AdminEditProduct/>}/>
+        <Route path='/admin/users' element={<Userlist/>}/>
         <Route path='/' element={<Register role="user"/>}/>
         <Route path='/user/verify-otp' element={<OTPVerify role='user'/>}/>
         <Route path='/user/login' element={<Login role='user' />} />

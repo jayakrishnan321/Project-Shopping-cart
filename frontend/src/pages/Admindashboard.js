@@ -96,123 +96,154 @@ const Admindashboard = () => {
   };
 
   return (
-    <div className="p-4 relative">
-      <div className="flex justify-between items-center mb-6 relative">
-        <h1 className="text-2xl font-semibold absolute left-1/2 transform -translate-x-1/2">
+    <div className="p-4 min-h-screen bg-gray-50">
+  {/* Header Section */}
+  <div className="bg-blue-800 text-white px-6 py-4 rounded-md mb-6 shadow-md flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+    
+    {/* Left: Title + Nav Buttons */}
+    <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+      <h1 className="text-2xl font-bold tracking-wide">Admin Dashboard</h1>
+      <div className="flex gap-2 mt-1 sm:mt-0">
+        <button
+          onClick={() => navigate("/admin/dashboard")}
+          className="text-sm bg-white text-blue-800 px-3 py-1 rounded hover:bg-blue-100 transition"
+        >
           All Products
-        </h1>
-        {adminInfo && (
-          <div className="relative ml-auto">
-            <button
-              onClick={() => setDropdownOpen((prev) => !prev)}
-              className="bg-blue-600 text-white px-4 py-2 rounded"
-            >
-              {adminInfo.name}
-            </button>
-            {dropdownOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow z-10">
-                <div className="flex flex-col items-center p-2 relative group">
-                  <img
-                    src={`http://localhost:5000${adminInfo.image}`}
-                    alt="No Profile"
-                    className="w-20 h-20 rounded-full object-cover border"
-                  />
-                  <button
-                    onClick={() => document.getElementById("profileImageInput").click()}
-                    className="absolute bottom-2 right-2 bg-white p-1 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition"
-                    title={adminInfo?.image ? "Update Profile Picture" : "Add Profile Picture"}
-                  >
-                    {adminInfo?.image ? "🖊️" : "➕"}
-                  </button>
-                  <input
-                    type="file"
-                    id="profileImageInput"
-                    accept="image/*"
-                    onChange={handleChange}
-                    className="hidden"
-                  />
-                  <button
-                    onClick={handleRemoveImage}
-                    className="absolute bottom-10 right-2 bg-white p-1 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition"
-                    title="Remove Profile Picture"
-                  >
-                    🗑️
-                  </button>
-                  <span className="text-sm text-gray-600 mt-1">Current Image</span>
-                </div>
-                <button
-                  onClick={() => handleAddimage()}
-                  className="block w-full text-left px-4 py-2 hover:bg-gray-100"
-                >
-                  {adminInfo?.image ? "Update Image" : "Add Image"}
-                </button>
-                <button
-                  onClick={() => {
-                    setDropdownOpen(false);
-                    navigate("/admin/change-password");
-                  }}
-                  className="block w-full text-left px-4 py-2 hover:bg-gray-100"
-                >
-                  Change Password
-                </button>
-                <button
-                  onClick={handleLogout}
-                  className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100"
-                >
-                  Logout
-                </button>
-              </div>
-            )}
-            <div className="mt-3">
+        </button>
+        <button
+          onClick={() => navigate("/admin/users")}
+          className="text-sm bg-white text-blue-800 px-3 py-1 rounded hover:bg-blue-100 transition"
+        >
+          All Users
+        </button>
+        <button
+          onClick={() => navigate("/admin/orders")}
+          className="text-sm bg-white text-blue-800 px-3 py-1 rounded hover:bg-blue-100 transition"
+        >
+          All Orders
+        </button>
+      </div>
+    </div>
+
+    {/* Right: Profile & Add Product */}
+    {adminInfo && (
+      <div className="relative text-right">
+        {/* Profile Dropdown Trigger */}
+        <button
+          onClick={() => setDropdownOpen((prev) => !prev)}
+          className="bg-white text-blue-800 px-4 py-2 rounded shadow hover:bg-gray-100 transition"
+        >
+          {adminInfo.name}
+        </button>
+
+        {/* Dropdown Menu */}
+        {dropdownOpen && (
+          <div className="absolute right-0 mt-2 w-56 bg-white border rounded shadow z-20 text-black">
+            <div className="flex flex-col items-center p-3 relative group">
+              <img
+                src={`http://localhost:5000${adminInfo.image}`}
+                alt="No Profile"
+                className="w-20 h-20 rounded-full object-cover border"
+              />
               <button
-                onClick={() => navigate("/admin/add-product")}
-                className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+                onClick={() => document.getElementById("profileImageInput").click()}
+                className="absolute bottom-2 right-2 bg-white p-1 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition"
+                title={adminInfo?.image ? "Update Profile Picture" : "Add Profile Picture"}
               >
-                Add Product
+                {adminInfo?.image ? "🖊️" : "➕"}
               </button>
+              <input
+                type="file"
+                id="profileImageInput"
+                accept="image/*"
+                onChange={handleChange}
+                className="hidden"
+              />
+              <button
+                onClick={handleRemoveImage}
+                className="absolute bottom-10 right-2 bg-white p-1 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition"
+                title="Remove Profile Picture"
+              >
+                🗑️
+              </button>
+              <span className="text-sm text-gray-600 mt-2">Current Image</span>
             </div>
+            <button
+              onClick={() => handleAddimage()}
+              className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+            >
+              {adminInfo?.image ? "Update Image" : "Add Image"}
+            </button>
+            <button
+              onClick={() => {
+                setDropdownOpen(false);
+                navigate("/admin/change-password");
+              }}
+              className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+            >
+              Change Password
+            </button>
+            <button
+              onClick={handleLogout}
+              className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100"
+            >
+              Logout
+            </button>
           </div>
         )}
-      </div>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-          {items.map((prod) => (
-            <div
-              key={prod._id}
-              className="border-[3px] border-black p-4 shadow"
-            >
-              <img
-                src={`http://localhost:5000${prod.image}`}
-                alt={prod.name}
-                className="w-full h-44 object-contain bg-gray-100 rounded"
-              />
-              <h2 className="text-base font-semibold mt-2">{prod.name}</h2>
-              <p className="text-sm text-gray-700">{prod.description}</p>
-              <p className="text-green-600 font-bold text-sm">₹ {prod.price}</p>
-              <p className="text-xs text-gray-500">Category: {prod.category}</p>
 
-              {/* ✅ Buttons */}
-              <div className="mt-3 flex justify-between gap-2">
-                <button
-                  onClick={() => handleEdit(prod._id)} // implement this
-                  className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleRemove(prod._id)} // implement this
-                  className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded"
-                >
-                  Remove
-                </button>
-              </div>
-            </div>
-          ))}
+        {/* Add Product Button */}
+        <div className="mt-3">
+          <button
+            onClick={() => navigate("/admin/add-product")}
+            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded transition"
+          >
+            ➕ Add Product
+          </button>
         </div>
-      )}
+      </div>
+    )}
+  </div>
+
+  {/* Products Grid */}
+  {loading ? (
+    <p className="text-center text-gray-600 text-lg">Loading products...</p>
+  ) : (
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+      {items.map((prod) => (
+        <div
+          key={prod._id}
+          className="border-[2px] border-gray-300 bg-white p-4 shadow rounded-lg transition hover:shadow-lg"
+        >
+          <img
+            src={`http://localhost:5000${prod.image}`}
+            alt={prod.name}
+            className="w-full h-44 object-contain bg-gray-100 rounded"
+          />
+          <h2 className="text-base font-semibold mt-2">{prod.name}</h2>
+          <p className="text-sm text-gray-700 line-clamp-2">{prod.description}</p>
+          <p className="text-green-600 font-bold text-sm mt-1">₹ {prod.price}</p>
+          <p className="text-xs text-gray-500">Category: {prod.category}</p>
+
+          <div className="mt-3 flex justify-between gap-2">
+            <button
+              onClick={() => handleEdit(prod._id)}
+              className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded"
+            >
+              Edit
+            </button>
+            <button
+              onClick={() => handleRemove(prod._id)}
+              className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded"
+            >
+              Remove
+            </button>
+          </div>
+        </div>
+      ))}
     </div>
+  )}
+</div>
 
   );
 };

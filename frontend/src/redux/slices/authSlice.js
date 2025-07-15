@@ -37,11 +37,22 @@ export const removeProfile = createAsyncThunk(
     }
   }
 );
+export const userlist=createAsyncThunk("admin/userlist",async(thunkAPI)=>{
+  try {
+    const res= await API.get('/admin/userlist')
+    return res.data;
 
+  }catch (err) {
+      return thunkAPI.rejectWithValue(err.response.data.message);
+    }
+})
 
 
 const initialState = {
   adminInfo: JSON.parse(sessionStorage.getItem("adminInfo")) || null,
+  users: [],         
+  loading: false,
+  error: null
 };
 
 const authSlice = createSlice({
@@ -57,7 +68,23 @@ const authSlice = createSlice({
       sessionStorage.removeItem("adminInfo");
     },
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(userlist.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(userlist.fulfilled, (state, action) => {
+        state.loading = false;
+        state.users = action.payload;
+      })
+      .addCase(userlist.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+  }
 });
+
 
 export const { setAdminInfo, logoutAdmin } = authSlice.actions;
 export default authSlice.reducer;
