@@ -21,6 +21,9 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/user",userRoutes)
 app.use("/api/cart",cartRoutes)
+app.use("/api/orders", require("./routes/orderRoutes"));
+
+app.use("/api/orders", require("./routes/orderRoutes"));
 
 
 mongoose.connect(process.env.MONGO_URI)

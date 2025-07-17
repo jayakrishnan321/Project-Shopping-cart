@@ -16,11 +16,9 @@ const Cart = () => {
             dispatch(fetchCart(userInfo.email));
         }
     }, [dispatch, userInfo, navigate]);
-
-    const handleBuy = (item) => {
-        alert(`Purchased: ${item.productId.name}`);
-        // You can add purchase logic here
-    };
+const handleBuy = (item) => {
+  navigate("/user/checkout", { state: { buyNowItem: item } });
+};
 
     if (loading) return <p className="text-center mt-6">Loading...</p>;
     if (error) return <p className="text-center mt-6 text-red-600">{error}</p>;
