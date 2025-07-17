@@ -32,7 +32,7 @@ function App() {
         <Route path='/user/dashboard' element={<Userdashboard/>}/>
         <Route path="/user/change-password" element={<ChangePasswordcomponent role="user" />} />
         <Route path='/user/cart' element={<Cart/>}/>
-        <Route path='/user/checkout' element={<Checkout/>}/>
+        <Route path='/user/checkout/:id' element={<Checkout/>}/>
         <Route path='/user/orders' element={<UserOrders/>}/>
       </Routes>
     </Router>

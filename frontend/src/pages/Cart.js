@@ -16,8 +16,8 @@ const Cart = () => {
             dispatch(fetchCart(userInfo.email));
         }
     }, [dispatch, userInfo, navigate]);
-const handleBuy = (item) => {
-  navigate("/user/checkout", { state: { buyNowItem: item } });
+const handleBuy = (item,id) => {
+  navigate(`/user/checkout/${id}`, { state: { buyNowItem: item } });
 };
 
     if (loading) return <p className="text-center mt-6">Loading...</p>;
@@ -79,7 +79,7 @@ const handleDecrease = async (itemId) => {
                             </p>
 
                             <button
-                                onClick={() => handleBuy(item)}
+                                onClick={() => handleBuy(item,item._id)}
                                 className="mt-3 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded w-full"
                             >
                                 Buy

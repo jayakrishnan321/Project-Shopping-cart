@@ -10,6 +10,7 @@ const adminRoutes=require('./routes/adminRoutes')
 const productRoutes = require("./routes/productRoutes");
 const userRoutes=require("./routes/userRoutes")
 const cartRoutes=require("./routes/cartRoutes")
+const orderRoutes=require("./routes/orderRoutes")
 
 app.use(cors())
 app.use(express.json())
@@ -21,10 +22,7 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/user",userRoutes)
 app.use("/api/cart",cartRoutes)
-app.use("/api/orders", require("./routes/orderRoutes"));
-
-app.use("/api/orders", require("./routes/orderRoutes"));
-
+app.use("/api/orders",orderRoutes)
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected"))

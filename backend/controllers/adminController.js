@@ -130,11 +130,11 @@ const removeProfileImage = async (req, res) => {
     res.status(500).json({ message: "Failed to remove profile image" });
   }
 };
-const Userlist=async(req,res)=>{
-  try{
-    const users=await User.find()
+const Userlist = async (req, res) => {
+  try {
+    const users = await User.find()
     return res.json(users)
-  }catch(err){
+  } catch (err) {
     console.log('cannot fetch user list')
   }
 }

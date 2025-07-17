@@ -9,7 +9,6 @@ const otpStore = {};
 const registerUser = async (req, res) => {
   const { name, email, phone, password, confirmPassword } = req.body;
 
-
   if (password !== confirmPassword)
     return res.status(400).json({ message: "Passwords do not match" });
 
