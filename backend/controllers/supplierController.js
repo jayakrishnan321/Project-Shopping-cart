@@ -62,17 +62,16 @@ const verifyOTP = async (req, res) => {
   }
 };
 
-
-
 const loginSupplier = async (req, res) => {
     const { email, password } = req.body;
 
     try {
         const supplier = await Supplier.findOne({ email });
         if (!supplier) return res.status(400).json({ message: 'User not found' });
+
         // Check if user is approved
         if (supplier.status !== 'approved') {
-            return res.status(403).json({ message: `Admin wil accept soon . Status: ${supplier.status}` });
+            return res.status(403).json({ message: `Admin will accept soon. Status: ${supplier.status}` });
         }
 
         // Check password
@@ -86,12 +85,17 @@ const loginSupplier = async (req, res) => {
             { expiresIn: '1d' }
         );
 
-        res.json({ token });
+        // ✅ Send success message and supplier details
+        res.json({
+            message: 'Login successful',
+            token
+        });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Server error during login' });
     }
 };
+
 module.exports = {
     registersupllier, verifyOTP, loginSupplier
 }

@@ -4,6 +4,7 @@ const { sendOTP } = require("../utils/sendOTP");
 const jwt = require('jsonwebtoken');
 const path = require("path");
 const User = require("../models/User");
+const Supplier = require("../models/Supplier");
 
 const otpStore = {};
 
@@ -138,7 +139,67 @@ const Userlist = async (req, res) => {
     console.log('cannot fetch user list')
   }
 }
+const Supplierlist = async (req, res) => {
+  try {
+   const suppliers = await Supplier.find({ status: "approved" });
 
+    return res.json(suppliers)
+  } catch (err) {
+    console.log('cannot fetch supplierlist')
+  }
+}
+const getPendingSuppliers = async (req, res) => {
+  try {
+    const suppliers = await Supplier.find({ status: "pending" }); // Only pending suppliers
+    console.log(suppliers)
+    res.json(suppliers);
+  } catch (error) {
+    console.error("Error fetching pending suppliers:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// ✅ Approve Supplier
+const approveSupplier = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const supplier = await Supplier.findByIdAndUpdate(
+      id,
+      { status: "approved" },
+      { new: true }
+    );
+
+    if (!supplier) {
+      return res.status(404).json({ message: "Supplier not found" });
+    }
+
+    res.json({ message: "Supplier approved successfully", supplier });
+  } catch (error) {
+    console.error("Error approving supplier:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// ✅ Reject Supplier
+const rejectSupplier = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const supplier = await Supplier.findByIdAndUpdate(
+      id,
+      { status: "rejected" },
+      { new: true }
+    );
+
+    if (!supplier) {
+      return res.status(404).json({ message: "Supplier not found" });
+    }
+
+    res.json({ message: "Supplier rejected successfully", supplier });
+  } catch (error) {
+    console.error("Error rejecting supplier:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
 module.exports = {
   registerAdmin,
@@ -147,5 +208,9 @@ module.exports = {
   ChangePassword,
   addimage,
   removeProfileImage,
-  Userlist
+  Userlist,
+  Supplierlist,
+  getPendingSuppliers,
+  approveSupplier,
+  rejectSupplier
 };

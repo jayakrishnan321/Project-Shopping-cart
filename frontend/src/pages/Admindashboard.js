@@ -122,6 +122,18 @@ const Admindashboard = () => {
         >
           All Orders
         </button>
+          <button
+          onClick={() => navigate("/admin/suppliers")}
+          className="text-sm bg-white text-blue-800 px-3 py-1 rounded hover:bg-blue-100 transition"
+        >
+          All Suppliers
+        </button>
+          <button
+          onClick={() => navigate("/admin/pendingsuppliers")}
+          className="text-sm bg-white text-blue-800 px-3 py-1 rounded hover:bg-blue-100 transition"
+        >
+          All Request
+        </button>
       </div>
     </div>
 

@@ -15,6 +15,9 @@ import AdminOrders from './pages/AdminOrders';
 import SupplierRegister from './pages/Supplier/SupplierRegister';
 import SupplierOtpVerify from './pages/Supplier/SupplierOtpVerify';
 import SupplierLogin from './pages/Supplier/SupplierLogin';
+import Supplierlist from './pages/Supplierlist';
+import SupplierRequest from './pages/SupplierRequest';
+import Supplierdashboard from './pages/Supplier/Supplierdashboard';
 
 function App() {
   return (
@@ -29,6 +32,8 @@ function App() {
         <Route path='/admin/edit-product/:id'  element={<AdminEditProduct/>}/>
         <Route path='/admin/users' element={<Userlist/>}/>
         <Route path='/admin/orders' element={<AdminOrders/>}/>
+        <Route path='/admin/suppliers' element={<Supplierlist/>}/>
+        <Route path='/admin/pendingsuppliers'element={<SupplierRequest/>}/>
         <Route path='/' element={<Register role="user"/>}/>
         <Route path='/user/verify-otp' element={<OTPVerify role='user'/>}/>
         <Route path='/user/login' element={<Login role='user' />} />
@@ -40,6 +45,7 @@ function App() {
         <Route path='/supplier/register' element={<SupplierRegister/>}/>
         <Route path='/supplier/verify-otp' element={<SupplierOtpVerify/>}/>
         <Route path='/supplier/login' element={<SupplierLogin/>}/>
+        <Route path='/supplier/dashboard' element={<Supplierdashboard/>}/>
       </Routes>
     </Router>
   );
