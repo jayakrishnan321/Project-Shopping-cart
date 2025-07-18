@@ -16,13 +16,51 @@ const sendOTP = async (email, otp) => {
     text: `Your OTP is: ${otp}`,
   });
 };
-const usersendOTP=async(email,otp)=>{
+
+const usersendOTP = async (email, otp) => {
   await transporter.sendMail({
-    from:`"shopping cart" <${process.env.EMAIL_USER}>`,
-    to:email,
-    subject:"OTP Verification",
-    text:`your otp is: ${otp}`,
+    from: `"Shopping Cart" <${process.env.EMAIL_USER}>`,
+    to: email,
+    subject: "OTP Verification",
+    text: `Your OTP is: ${otp}`,
   });
+};
+
+const sendsupplierOTP = async (email, otp) => {
+  await transporter.sendMail({
+    from: `"Ecommerce App" <${process.env.EMAIL_USER}>`,
+    to: email,
+    subject: "OTP Verification for Supplier Registration",
+    text: `Your OTP is: ${otp}`,
+  });
+};
+
+async function sendAdminApprovalEmail(adminEmails, supplierName, supplierEmail) {
+  if (!adminEmails || adminEmails.length === 0) {
+    console.error("No admin emails found");
+    return;
+  }
+
+  const mailOptions = {
+    from: `"Ecommerce App" <${process.env.EMAIL_USER}>`,
+    to: adminEmails.join(","), // ✅ convert array to string
+    subject: "New Supplier Approval Required",
+    html: `
+      <h3>New Supplier Registration</h3>
+      <p>Name: ${supplierName}</p>
+      <p>Email: ${supplierEmail}</p>
+      <p>Please review and approve or reject this supplier.</p>
+      <a href="${process.env.FRONTEND_URL}/admin/approve-supplier?email=${supplierEmail}">Approve</a>
+      |
+      <a href="${process.env.FRONTEND_URL}/admin/reject-supplier?email=${supplierEmail}">Reject</a>
+    `,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+  } catch (error) {
+    console.error("Error sending admin approval email:", error);
+  }
 }
 
-module.exports = { sendOTP,usersendOTP }; 
+module.exports = { sendOTP, usersendOTP, sendsupplierOTP, sendAdminApprovalEmail };

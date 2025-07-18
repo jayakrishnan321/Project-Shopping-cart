@@ -12,6 +12,9 @@ import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import UserOrders from './pages/UserOrders';
 import AdminOrders from './pages/AdminOrders';
+import SupplierRegister from './pages/Supplier/SupplierRegister';
+import SupplierOtpVerify from './pages/Supplier/SupplierOtpVerify';
+import SupplierLogin from './pages/Supplier/SupplierLogin';
 
 function App() {
   return (
@@ -34,6 +37,9 @@ function App() {
         <Route path='/user/cart' element={<Cart/>}/>
         <Route path='/user/checkout/:id' element={<Checkout/>}/>
         <Route path='/user/orders' element={<UserOrders/>}/>
+        <Route path='/supplier/register' element={<SupplierRegister/>}/>
+        <Route path='/supplier/verify-otp' element={<SupplierOtpVerify/>}/>
+        <Route path='/supplier/login' element={<SupplierLogin/>}/>
       </Routes>
     </Router>
   );

@@ -11,6 +11,7 @@ const productRoutes = require("./routes/productRoutes");
 const userRoutes=require("./routes/userRoutes")
 const cartRoutes=require("./routes/cartRoutes")
 const orderRoutes=require("./routes/orderRoutes")
+const supplierRoutes=require("./routes/supplierRoutes")
 
 app.use(cors())
 app.use(express.json())
@@ -23,6 +24,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/user",userRoutes)
 app.use("/api/cart",cartRoutes)
 app.use("/api/orders",orderRoutes)
+app.use("/api/supplier",supplierRoutes)
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected"))
