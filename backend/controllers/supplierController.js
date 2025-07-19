@@ -1,12 +1,12 @@
 const Supplier = require("../models/Supplier");
 const bcrypt = require("bcryptjs");
-const { sendsupplierOTP,sendAdminApprovalEmail,sendEmailToAdmin } = require("../utils/sendOTP");
+const { sendsupplierOTP,sendAdminApprovalEmail,sendEmailToAdmin ,sendOTPorder} = require("../utils/sendOTP");
 const jwt = require('jsonwebtoken');
 const path = require("path");
 const Admin=require('../models/Admin')
 const Order = require("../models/Order");
 const otpStore = {};
-
+const orderOTPStore={};
 const ChangePassword = async (req, res) => {
   const { email } = req.params;
   const { oldPassword, newPassword } = req.body;
@@ -213,8 +213,51 @@ const fetchcurrentorders = async (req, res) => {
   }
 };
 
+const sendOrderOTP = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const order = await Order.findById(id);
+    if (!order) return res.status(404).json({ message: "Order not found" });
+console.log(order)
+    // Generate OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    orderOTPStore[id] = { otp, expires: Date.now() + 5 * 60 * 1000 }; // Valid for 5 mins
 
+    // Send OTP to user's email
+    await sendOTPorder(order.userEmail, otp);
+
+    res.json({ message: "OTP sent to user's email" });
+  } catch (error) {
+    console.error("OTP sending error:", error);
+    res.status(500).json({ message: "Failed to send OTP" });
+  }
+};
+const verifyOrderOTP = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { otp } = req.body;
+
+    const record = orderOTPStore[id];
+    if (!record || record.otp !== otp || Date.now() > record.expires) {
+      return res.status(400).json({ message: "Invalid or expired OTP" });
+    }
+
+    // Mark order as Delivered
+    const order = await Order.findByIdAndUpdate(
+      id,
+      { status: "Delivered" },
+      { new: true }
+    );
+    delete orderOTPStore[id];
+
+    res.json({ message: "Order delivered successfully", order });
+  } catch (error) {
+    console.error("OTP verification error:", error);
+    res.status(500).json({ message: "Failed to verify OTP" });
+  }
+};
 
 module.exports = {
-    registersupllier, verifyOTP, loginSupplier,addimage,removeProfileImage,ChangePassword,updateplaceanddistrict,fetchcurrentorders
+    registersupllier, verifyOTP, loginSupplier,addimage,removeProfileImage,ChangePassword,updateplaceanddistrict,fetchcurrentorders,
+    sendOrderOTP,verifyOrderOTP
 }

@@ -76,4 +76,31 @@ async function sendAdminApprovalEmail(adminEmails, supplierName, supplierEmail) 
   }
 }
 
-module.exports = { sendOTP, usersendOTP, sendsupplierOTP, sendAdminApprovalEmail ,sendEmailToAdmin};
+
+const sendOTPorder= async (to, otp, orderId = null) => {
+  try {
+    const subject = orderId
+      ? `Your Delivery OTP for Order #${orderId}`
+      : `Your Verification OTP`;
+
+    const message = orderId
+      ? `Dear Customer,\n\nYour delivery OTP for order #${orderId} is: ${otp}.\n\nPlease share this OTP with the delivery agent to confirm delivery.\n\nThank you for shopping with us!`
+      : `Your OTP code is: ${otp}`;
+
+    await transporter.sendMail({
+      from: `"Ecommerce App" <${process.env.EMAIL_USER}>`,
+      to,
+      subject,
+      text: message,
+    });
+
+  } catch (error) {
+    console.error("Error sending OTP email:", error);
+    throw new Error("Failed to send OTP email");
+  }
+};
+
+module.exports = { sendOTP };
+
+
+module.exports = { sendOTP, usersendOTP, sendsupplierOTP, sendAdminApprovalEmail ,sendEmailToAdmin,sendOTPorder};

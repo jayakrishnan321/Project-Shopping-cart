@@ -39,9 +39,7 @@ export const removeProfile = createAsyncThunk(
   }
 );
 
-const initialState = {
-  supplierInfo: JSON.parse(sessionStorage.getItem("supplierInfo")) || null,
-};
+
 export const updateSupplierDetails = createAsyncThunk(
   "supplier/updateDetails",
   async ({ email, district, place }, thunkAPI) => {
@@ -69,8 +67,36 @@ export const suppliercurrentorders = createAsyncThunk(
     }
   }
 );
+export const sendOrderOTP = createAsyncThunk(
+  "supplier/sendOrderOTP",
+  async (id, thunkAPI) => {
+    try {
+      const res = await API.post(`/supplier/${id}/send-otp`);
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response?.data?.message || "Failed to send OTP");
+    }
+  }
+);
 
-
+// Verify OTP and Deliver
+export const verifyOrderOTP = createAsyncThunk(
+  "supplier/verifyOrderOTP",
+  async ({ id, otp }, thunkAPI) => {
+    try {
+      const res = await API.put(`/supplier/${id}/verify-otp`, { otp });
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response?.data?.message || "Failed to verify OTP");
+    }
+  }
+);
+const initialState = {
+  supplierInfo: JSON.parse(sessionStorage.getItem("supplierInfo")) || null,
+  orders: [],
+  loading: false,
+  error: null,
+};
 const supplierSlice = createSlice({
   name: "supplier",
   initialState,
@@ -84,6 +110,32 @@ const supplierSlice = createSlice({
       sessionStorage.removeItem("supplierInfo");
     },
   },
+    extraReducers: (builder) => {
+    builder
+      .addCase(sendOrderOTP.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(sendOrderOTP.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(sendOrderOTP.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(verifyOrderOTP.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(verifyOrderOTP.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(verifyOrderOTP.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+    },
+
 });
 
 
