@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { supplierlist } from "../redux/slices/authSlice" // adjust path
+import { supplierlist } from "../redux/slices/authSlice" 
 
 function Supplierlist() {
   const dispatch = useDispatch();
   const { suppliers, loading, error, adminInfo } = useSelector(
     (state) => state.auth
   );
+  console.log(suppliers)
 
   useEffect(() => {
     if (adminInfo) {
@@ -25,6 +26,7 @@ function Supplierlist() {
         <table className="w-full border border-gray-300">
           <thead>
             <tr className="bg-gray-200">
+              <th className="p-2 border">Profile</th>
               <th className="p-2 border">Name</th>
               <th className="p-2 border">Email</th>
               <th className="p-2 border">Phone</th>
@@ -34,6 +36,13 @@ function Supplierlist() {
           <tbody>
             {suppliers.map((supplier) => (
               <tr key={supplier._id} className="text-center">
+                <td className="p-2 border">
+                  <img
+                    src={`http://localhost:5000${supplier.image}`}
+                    alt={supplier.name}
+                    className="w-12 h-12 rounded-full object-cover mx-auto"
+                  />
+                </td>
                 <td className="p-2 border">{supplier.name}</td>
                 <td className="p-2 border">{supplier.email}</td>
                 <td className="p-2 border">{supplier.phone}</td>
@@ -44,6 +53,8 @@ function Supplierlist() {
             ))}
           </tbody>
         </table>
+
+
       ) : (
         !loading && <p>No suppliers found.</p>
       )}

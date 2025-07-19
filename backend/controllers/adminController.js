@@ -200,6 +200,52 @@ const rejectSupplier = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+const approveSupplierDetails = async (req, res) => {
+  try {
+    const supplier = await Supplier.findById(req.params.id);
+    if (!supplier) return res.status(404).json({ message: "Supplier not found" });
+
+    if (supplier.pendingDetails) {
+      supplier.district = supplier.pendingDetails.district;
+      supplier.place = supplier.pendingDetails.place;
+      supplier.pendingDetails = undefined;
+      await supplier.save();
+    }
+
+    res.json({ message: "Supplier details approved successfully." });
+  } catch (error) {
+    console.error("Approval error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const rejectSupplierDetails = async (req, res) => {
+  try {
+    const supplier = await Supplier.findById(req.params.id);
+    if (!supplier) return res.status(404).json({ message: "Supplier not found" });
+
+    supplier.pendingDetails = undefined;
+    await supplier.save();
+
+    res.json({ message: "Supplier details update rejected." });
+  } catch (error) {
+    console.error("Rejection error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const getPendingUpdates = async (req, res) => {
+  try {
+    const suppliers = await Supplier.find({
+      pendingDetails: { $exists: true, $ne: null }
+    });
+
+    res.json(suppliers);
+  } catch (error) {
+    console.error("Error fetching pending updates:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
 module.exports = {
   registerAdmin,
@@ -212,5 +258,6 @@ module.exports = {
   Supplierlist,
   getPendingSuppliers,
   approveSupplier,
-  rejectSupplier
+  rejectSupplier,
+  approveSupplierDetails,rejectSupplierDetails,getPendingUpdates
 };

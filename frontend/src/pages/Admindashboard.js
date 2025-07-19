@@ -12,7 +12,7 @@ const Admindashboard = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { items, loading } = useSelector((state) => state.product);
   const { adminInfo } = useSelector((state) => state.auth);
-
+console.log(adminInfo)
   useEffect(() => {
     if (!adminInfo || !adminInfo.token) {
       navigate('/admin/login');
@@ -131,6 +131,12 @@ const Admindashboard = () => {
           className="text-sm bg-white text-blue-800 px-3 py-1 rounded hover:bg-blue-100 transition"
         >
           All Request
+        </button>
+        <button
+          onClick={() => navigate("/admin/supplierrequest")}
+          className="text-sm bg-white text-blue-800 px-3 py-1 rounded hover:bg-blue-100 transition"
+        >
+          All supplier Request
         </button>
       </div>
     </div>

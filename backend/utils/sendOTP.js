@@ -34,6 +34,19 @@ const sendsupplierOTP = async (email, otp) => {
     text: `Your OTP is: ${otp}`,
   });
 };
+const sendEmailToAdmin = async ({ to, subject, text }) => {
+  try {
+    await transporter.sendMail({
+      from: `"Ecommerce App" <${process.env.EMAIL_USER}>`,
+      to,
+      subject,
+      text,
+    });
+    console.log(`Email sent to admin: ${to}`);
+  } catch (error) {
+    console.error("Error sending email to admin:", error);
+  }
+};
 
 async function sendAdminApprovalEmail(adminEmails, supplierName, supplierEmail) {
   if (!adminEmails || adminEmails.length === 0) {
@@ -63,4 +76,4 @@ async function sendAdminApprovalEmail(adminEmails, supplierName, supplierEmail) 
   }
 }
 
-module.exports = { sendOTP, usersendOTP, sendsupplierOTP, sendAdminApprovalEmail };
+module.exports = { sendOTP, usersendOTP, sendsupplierOTP, sendAdminApprovalEmail ,sendEmailToAdmin};

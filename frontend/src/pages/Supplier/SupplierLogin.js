@@ -35,6 +35,8 @@ function SupplierLogin() {
                      email: decoded.email,
                      image: decoded.image,
                      token: token,
+                     place:decoded.place,
+                     district:decoded.district
                    }))
              
                

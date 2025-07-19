@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const supplierSchema = new mongoose.Schema({
     name: String,
@@ -11,6 +11,15 @@ const supplierSchema = new mongoose.Schema({
         required: false,
     },
     status: { type: String, default: '' },
+    district: { type: String, default: '' },
+    place: { type: String, default: '' },
+
+    // New field for pending updates
+    pendingDetails: {
+        district: { type: String, default: '' },
+        place: { type: String, default: '' }
+    },
+
     createdAt: { type: Date, default: Date.now },
 });
 

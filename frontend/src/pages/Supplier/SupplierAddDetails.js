@@ -1,0 +1,75 @@
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { updateSupplierDetails } from '../../redux/slices/supplierSlice'
+function SupplierAddDetails() {
+    const [district, setDistrict] = useState('')
+    const [place, setPlace] = useState('')
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const { supplierInfo } = useSelector((state) => state.supplier)
+    console.log(supplierInfo)
+
+
+    useEffect(() => {
+        if (supplierInfo) {
+            setDistrict(supplierInfo.district || '');
+            setPlace(supplierInfo.place || '');
+        }
+    }, [supplierInfo]);
+   const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    await dispatch(
+      updateSupplierDetails({
+        email: supplierInfo.email,
+        district,
+        place
+      })
+    ).unwrap(); // unwrap() ensures errors are caught in the try/catch
+
+    alert("Details sent for admin approval!");
+    navigate("/supplier/dashboard"); // navigate to dashboard
+  } catch (err) {
+    alert(err || "Failed to update details");
+  }
+};
+
+
+
+    return (
+        <div className="p-6 max-w-sm mx-auto bg-white rounded shadow">
+            <h2 className="text-xl font-bold mb-4">Add Supplier Details</h2>
+            <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                    <label className="block mb-1 font-semibold">District</label>
+                    <input
+                        type="text"
+                        placeholder="Enter District"
+                        className="border p-2 w-full rounded"
+                        value={district}
+                        onChange={(e) => setDistrict(e.target.value)}
+                    />
+                </div>
+                <div>
+                    <label className="block mb-1 font-semibold">Place</label>
+                    <input
+                        type="text"
+                        placeholder="Enter Place"
+                        className="border p-2 w-full rounded"
+                        value={place}
+                        onChange={(e) => setPlace(e.target.value)}
+                    />
+                </div>
+                <button
+                    type="submit"
+                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                >
+                    Submit
+                </button>
+            </form>
+        </div>
+    )
+}
+
+export default SupplierAddDetails

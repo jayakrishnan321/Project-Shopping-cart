@@ -1,6 +1,6 @@
 const Supplier = require("../models/Supplier");
 const bcrypt = require("bcryptjs");
-const { sendsupplierOTP,sendAdminApprovalEmail } = require("../utils/sendOTP");
+const { sendsupplierOTP,sendAdminApprovalEmail,sendEmailToAdmin } = require("../utils/sendOTP");
 const jwt = require('jsonwebtoken');
 const path = require("path");
 const Admin=require('../models/Admin')
@@ -145,7 +145,14 @@ const loginSupplier = async (req, res) => {
 
         // Generate token
         const token = jwt.sign(
-            { id: supplier._id, email: supplier.email, name: supplier.name,image:supplier.image },
+            { id: supplier._id,
+               email: supplier.email,
+                name: supplier.name,
+                image:supplier.image,
+                district:supplier.district,
+                place:supplier.place
+                
+             },
             process.env.JWT_SECRET,
             { expiresIn: '1d' }
         );
@@ -160,7 +167,38 @@ const loginSupplier = async (req, res) => {
         res.status(500).json({ message: 'Server error during login' });
     }
 };
+const updateplaceanddistrict = async (req, res) => {
+  try {
+    const { district, place } = req.body;
+    const supplier = await Supplier.findOne({ email: req.params.email });
+
+    if (!supplier) return res.status(404).json({ message: "Supplier not found" });
+
+    // Save updates as pending
+    supplier.pendingDetails = { district, place };
+    await supplier.save();
+
+    // Notify admin
+    const admins = await Admin.find({}, "email");
+    const adminEmails = admins.map((admin) => admin.email);
+
+    await sendEmailToAdmin({
+      to: adminEmails.join(","),
+      subject: "Supplier Details Update Request",
+      text: `Supplier ${supplier.name} has requested an update:\nDistrict: ${district}\nPlace: ${place}\nPlease approve or reject.`,
+    });
+
+    res.json({
+      message: "Update request sent for admin approval.",
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
 
 module.exports = {
-    registersupllier, verifyOTP, loginSupplier,addimage,removeProfileImage,ChangePassword
+    registersupllier, verifyOTP, loginSupplier,addimage,removeProfileImage,ChangePassword,updateplaceanddistrict
 }

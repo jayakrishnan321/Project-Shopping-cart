@@ -42,6 +42,21 @@ export const removeProfile = createAsyncThunk(
 const initialState = {
   supplierInfo: JSON.parse(sessionStorage.getItem("supplierInfo")) || null,
 };
+export const updateSupplierDetails = createAsyncThunk(
+  "supplier/updateDetails",
+  async ({ email, district, place }, thunkAPI) => {
+    try {
+      const res = await API.put(`/supplier/update-details/${email}`, {
+        district,
+        place,
+      });
+      return res.data; // Return updated supplier
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response?.data?.message || "Update failed");
+    }
+  }
+);
+
 
 const supplierSlice = createSlice({
   name: "supplier",
