@@ -4,7 +4,7 @@ const { sendsupplierOTP,sendAdminApprovalEmail,sendEmailToAdmin } = require("../
 const jwt = require('jsonwebtoken');
 const path = require("path");
 const Admin=require('../models/Admin')
-
+const Order = require("../models/Order");
 const otpStore = {};
 
 const ChangePassword = async (req, res) => {
@@ -197,8 +197,24 @@ const updateplaceanddistrict = async (req, res) => {
   }
 };
 
+const fetchcurrentorders = async (req, res) => {
+  try {
+    const { place, district } = req.params;
+
+    // Find orders where the address contains BOTH place and district
+    const orders = await Order.find({
+      address: { $regex: new RegExp(`${place}.*${district}`, "i") },
+    });
+
+    res.status(200).json(orders);
+  } catch (err) {
+    console.error("Fetch current orders error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 
 
 module.exports = {
-    registersupllier, verifyOTP, loginSupplier,addimage,removeProfileImage,ChangePassword,updateplaceanddistrict
+    registersupllier, verifyOTP, loginSupplier,addimage,removeProfileImage,ChangePassword,updateplaceanddistrict,fetchcurrentorders
 }

@@ -11,6 +11,7 @@ const AdminOrders = () => {
       try {
         const res = await axios.get("http://localhost:5000/api/orders");
         setOrders(res.data);
+        console.log(res.data)
         setLoading(false);
       } catch (err) {
         setError("Failed to fetch orders");
@@ -33,6 +34,7 @@ const AdminOrders = () => {
             <tr className="bg-gray-100">
               <th className="p-2 border">Order ID</th>
               <th className="p-2 border">User Email</th>
+              <th className="p-2 border">User address</th>
               <th className="p-2 border">Items</th>
               <th className="p-2 border">Total</th>
               <th className="p-2 border">Status</th>
@@ -44,6 +46,7 @@ const AdminOrders = () => {
               <tr key={order._id}>
                 <td className="p-2 border text-center">{order._id}</td>
                 <td className="p-2 border text-center">{order.userEmail}</td>
+                <td className="p-2 border text-center">{order.address}</td>
                 <td className="p-2 border text-center">
                   {order.items.map((item, idx) => (
                     <div key={idx} className="flex gap-2 items-center text-center mb-1">

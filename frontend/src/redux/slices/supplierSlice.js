@@ -56,6 +56,19 @@ export const updateSupplierDetails = createAsyncThunk(
     }
   }
 );
+export const suppliercurrentorders = createAsyncThunk(
+  "supplier/currentorders", // typePrefix (required)
+  async ({ place, district }, thunkAPI) => {
+    try {
+      const res = await API.get(`/supplier/currentorders/${district}/${place}`);
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to fetch"
+      );
+    }
+  }
+);
 
 
 const supplierSlice = createSlice({

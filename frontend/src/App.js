@@ -21,6 +21,7 @@ import Supplierdashboard from './pages/Supplier/Supplierdashboard';
 import SupplierChangePassword from './pages/Supplier/SupplierChangePassword';
 import SupplierAddDetails from './pages/Supplier/SupplierAddDetails';
 import AdminSupplierRequest from './pages/AdminSupplierRequest';
+import SupplierCurrentOrders from './pages/Supplier/SupplierCurrentOrders';
 function App() {
   return (
     <Router>
@@ -51,6 +52,7 @@ function App() {
         <Route path='/supplier/dashboard' element={<Supplierdashboard/>}/>
         <Route path='/supplier/change-password' element={<SupplierChangePassword/>}/>
         <Route path='/supplier/addplacedetails' element={<SupplierAddDetails/>}/>
+        <Route path='/supplier/currentorders' element={<SupplierCurrentOrders/>}/>
       </Routes>
     </Router>
   );
