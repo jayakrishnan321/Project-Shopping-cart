@@ -97,10 +97,8 @@ const Admindashboard = () => {
 
   return (
     <div className="p-4 min-h-screen bg-gray-50">
-  {/* Header Section */}
   <div className="bg-blue-800 text-white px-6 py-4 rounded-md mb-6 shadow-md flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
     
-    {/* Left: Title + Nav Buttons */}
     <div className="flex flex-col sm:flex-row sm:items-center gap-3">
       <h1 className="text-2xl font-bold tracking-wide">Admin Dashboard</h1>
       <div className="flex gap-2 mt-1 sm:mt-0">

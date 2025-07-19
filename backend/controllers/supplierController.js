@@ -7,6 +7,71 @@ const Admin=require('../models/Admin')
 
 const otpStore = {};
 
+const ChangePassword = async (req, res) => {
+  const { email } = req.params;
+  const { oldPassword, newPassword } = req.body;
+
+  try {
+    const supplier = await Supplier.findOne({ email });
+    if (!supplier) {
+      return res.status(404).json({ message: "Admin not found" });
+    }
+
+    const isMatch = await bcrypt.compare(oldPassword, supplier.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Old password is incorrect" });
+    }
+
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+
+   supplier.password = hashedNewPassword;
+    await supplier.save();
+
+    res.status(200).json({ message: "Password changed successfully" });
+  } catch (err) {
+    console.error("Error changing password:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+const addimage = async (req, res) => {
+  try {
+    const email = req.params.email;
+    const imagePath = req.file ? `/profile/${req.file.filename}` : "";
+
+    const supplier= await Supplier.findOneAndUpdate(
+      { email },
+      { image: imagePath },
+      { new: true }
+    );
+
+    if (!supplier) {
+      return res.status(404).json({ message: "supplier not found" });
+    }
+
+    res.status(200).json({ message: "Profile image updated", supplier });
+  } catch (error) {
+    console.error("Add image error:", error);
+    res.status(500).json({ message: "Failed to update image" });
+  }
+};
+const removeProfileImage = async (req, res) => {
+  try {
+    const email = req.params.email;
+
+    const supplier = await Supplier.findOneAndUpdate(
+      { email },
+      { image: "" },
+      { new: true }
+    );
+
+    if (!supplier) return res.status(404).json({ message: "Admin not found" });
+
+    res.status(200).json({ message: "Profile image removed", supplier });
+  } catch (error) {
+    console.error("Remove image error:", error);
+    res.status(500).json({ message: "Failed to remove profile image" });
+  }
+};
 const registersupllier = async (req, res) => {
     const { name, email, phone, password } = req.body;
     const existingSupplier = await Supplier.findOne({ email });
@@ -80,7 +145,7 @@ const loginSupplier = async (req, res) => {
 
         // Generate token
         const token = jwt.sign(
-            { id: supplier._id, email: supplier.email, name: supplier.name },
+            { id: supplier._id, email: supplier.email, name: supplier.name,image:supplier.image },
             process.env.JWT_SECRET,
             { expiresIn: '1d' }
         );
@@ -97,5 +162,5 @@ const loginSupplier = async (req, res) => {
 };
 
 module.exports = {
-    registersupllier, verifyOTP, loginSupplier
+    registersupllier, verifyOTP, loginSupplier,addimage,removeProfileImage,ChangePassword
 }

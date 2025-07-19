@@ -87,7 +87,7 @@ const initialState = {
   adminInfo: JSON.parse(sessionStorage.getItem("adminInfo")) || null,
   users: [],
   suppliers: [],
-  pendingSuppliers: [], // ✅ Add this to avoid undefined
+  pendingSuppliers: [], 
   loading: false,
   error: null,
 };

@@ -18,7 +18,7 @@ import SupplierLogin from './pages/Supplier/SupplierLogin';
 import Supplierlist from './pages/Supplierlist';
 import SupplierRequest from './pages/SupplierRequest';
 import Supplierdashboard from './pages/Supplier/Supplierdashboard';
-
+import SupplierChangePassword from './pages/Supplier/SupplierChangePassword';
 function App() {
   return (
     <Router>
@@ -46,6 +46,7 @@ function App() {
         <Route path='/supplier/verify-otp' element={<SupplierOtpVerify/>}/>
         <Route path='/supplier/login' element={<SupplierLogin/>}/>
         <Route path='/supplier/dashboard' element={<Supplierdashboard/>}/>
+        <Route path='/supplier/change-password' element={<SupplierChangePassword/>}/>
       </Routes>
     </Router>
   );
