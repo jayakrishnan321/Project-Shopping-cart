@@ -19,6 +19,13 @@ const orderSchema = new mongoose.Schema({
   paymentId: { type: String, required: true },
   status: { type: String, default: "Processing" },
   arrivalDate: { type: Date },
+  supplier: {
+    supplierId: { type: mongoose.Schema.Types.ObjectId, ref: "Supplier" },
+    name: { type: String },
+    email: { type: String },
+    district: { type: String },
+    place: { type: String },
+  },
   createdAt: { type: Date, default: Date.now },
 });
 
