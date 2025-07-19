@@ -24,61 +24,75 @@ const Checkout = () => {
     : items.reduce(
       (acc, item) => acc + Number(item.productId.price) * Number(item.quantity),
       0
+    );const handlePayment = async () => {
+  if (!houseName || !postOffice || !city || !district || !pincode) {
+    alert("Please fill all address details");
+    return;
+  }
+
+  const fullAddress = `${houseName}, ${postOffice}, ${city}, ${district}, ${pincode}`;
+
+  // **Check supplier availability first**
+  try {
+    const res = await axios.get(
+      `http://localhost:5000/api/supplier/check/${district}/${city}`
     );
-  const handlePayment = async () => {
-    if (!houseName || !postOffice || !city || !district || !pincode) {
-      alert("Please fill all address details");
-      return;
+
+    if (!res.data.success) {
+      alert(res.data.message || "No supplier available in your area");
+      return; // Stop payment
     }
+  } catch (err) {
+    alert("Delivery not available for your address");
+    return;
+  }
 
-    const fullAddress = `${houseName}, ${postOffice}, ${city}, ${district}, ${pincode}`;
-    const amountInPaise = totalPrice * 100; // Razorpay needs amount in paise
+  const amountInPaise = totalPrice * 100;
 
-    const options = {
-      key: process.env.REACT_APP_RAZORPAY_KEY_ID, // from Razorpay Dashboard
-      amount: amountInPaise,
-      currency: "INR",
-      name: "Shopping Payment",
-      description: "Order Payment",
-      handler: async function (response) {
-        // response.razorpay_payment_id will be available here
-        const orderData = {
-          userEmail: userInfo.email,
-          items: buyNowItem ? [buyNowItem] : items,
-          address: fullAddress,
-          totalPrice,
-          paymentId: response.razorpay_payment_id,
-        };
+  const options = {
+    key: process.env.REACT_APP_RAZORPAY_KEY_ID,
+    amount: amountInPaise,
+    currency: "INR",
+    name: "Shopping Payment",
+    description: "Order Payment",
+    handler: async function (response) {
+      const orderData = {
+        userEmail: userInfo.email,
+        items: buyNowItem ? [buyNowItem] : items,
+        address: fullAddress,
+        totalPrice,
+        paymentId: response.razorpay_payment_id,
+      };
 
-        try {
-          await fetch("http://localhost:5000/api/orders/create", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${userInfo.token}`,
-            },
-            body: JSON.stringify(orderData),
-          });
-          await axios.delete(`http://localhost:5000/api/cart/delete/${id}`)
-          alert("Payment Successful! Your order has been placed.");
-          navigate("/user/orders");
-        } catch (err) {
-          console.error(err);
-          alert("Order saving failed");
-        }
-      },
-      prefill: {
-        name: userInfo.name,
-        email: userInfo.email,
-      },
-      theme: {
-        color: "#3399cc",
-      },
-    };
-
-    const rzp = new window.Razorpay(options);
-    rzp.open();
+      try {
+        await fetch("http://localhost:5000/api/orders/create", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userInfo.token}`,
+          },
+          body: JSON.stringify(orderData),
+        });
+        await axios.delete(`http://localhost:5000/api/cart/delete/${id}`);
+        alert("Payment Successful! Your order has been placed.");
+        navigate("/user/orders");
+      } catch (err) {
+        console.error(err);
+        alert("Order saving failed");
+      }
+    },
+    prefill: {
+      name: userInfo.name,
+      email: userInfo.email,
+    },
+    theme: {
+      color: "#3399cc",
+    },
   };
+
+  const rzp = new window.Razorpay(options);
+  rzp.open();
+};
 
   useEffect(() => {
     if (!userInfo || !userInfo.token) {

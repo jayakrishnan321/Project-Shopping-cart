@@ -1,5 +1,7 @@
 const Order = require("../models/Order");
 const Supplier=require('../models/Supplier')
+
+
 exports.createOrder = async (req, res) => {
   try {
     const { userEmail, items, address, totalPrice, paymentId } = req.body;
@@ -20,6 +22,14 @@ exports.createOrder = async (req, res) => {
       status: "approved",
     });
 
+    // ❌ If no supplier is found, return an error
+    if (!supplier) {
+      return res.status(400).json({
+        success: false,
+        message: `Sorry, we cannot deliver to ${place}, ${district} as no supplier is available.`,
+      });
+    }
+
     // Format order items
     const formattedItems = items.map((item) => ({
       productId: item.productId._id,
@@ -37,15 +47,13 @@ exports.createOrder = async (req, res) => {
       totalPrice,
       paymentId,
       arrivalDate,
-      supplier: supplier
-        ? {
-            supplierId: supplier._id,
-            name: supplier.name,
-            email: supplier.email,
-            district: supplier.district,
-            place: supplier.place,
-          }
-        : null,
+      supplier: {
+        supplierId: supplier._id,
+        name: supplier.name,
+        email: supplier.email,
+        district: supplier.district,
+        place: supplier.place,
+      },
     });
 
     await newOrder.save();
