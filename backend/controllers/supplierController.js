@@ -256,8 +256,25 @@ const verifyOrderOTP = async (req, res) => {
     res.status(500).json({ message: "Failed to verify OTP" });
   }
 };
+// supplierRoutes.js
+const getsupplierforadmin= async (req, res) => {
+  try {
+    const { district, place } = req.params;
+    const supplier = await Supplier.findOne({
+      district: district,
+      place: place,
+      status: "approved"
+    });
+    if (!supplier) {
+      return res.status(404).json({ message: "No supplier found for this location" });
+    }
+    res.json(supplier);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
 module.exports = {
     registersupllier, verifyOTP, loginSupplier,addimage,removeProfileImage,ChangePassword,updateplaceanddistrict,fetchcurrentorders,
-    sendOrderOTP,verifyOrderOTP
+    sendOrderOTP,verifyOrderOTP,getsupplierforadmin
 }

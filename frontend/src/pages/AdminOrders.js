@@ -5,19 +5,39 @@ const AdminOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const fetchSupplier = async (district, place) => {
+    try {
+      const res = await axios.get(`http://localhost:5000/api/supplier/by-location/${district}/${place}`);
+      return res.data;
+    } catch (err) {
+      return null;
+    }
+  };
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
         const res = await axios.get("http://localhost:5000/api/orders");
-        setOrders(res.data);
-        console.log(res.data)
+        const ordersWithSuppliers = await Promise.all(
+          res.data.map(async (order) => {
+            // Extract district and place from address (assuming last two parts of the address)
+            const addressParts = order.address.split(",");
+            const place = addressParts[addressParts.length - 3]?.trim().toLowerCase();
+            const district = addressParts[addressParts.length - 2]?.trim().toLowerCase();
+
+
+            const supplier = await fetchSupplier(district, place);
+            return { ...order, supplier };
+          })
+        );
+        setOrders(ordersWithSuppliers);
         setLoading(false);
       } catch (err) {
         setError("Failed to fetch orders");
         setLoading(false);
       }
     };
+
 
     fetchOrders();
   }, []);
@@ -33,6 +53,7 @@ const AdminOrders = () => {
           <thead>
             <tr className="bg-gray-100">
               <th className="p-2 border">Order ID</th>
+              <th className="p-2 border">Supplier</th>
               <th className="p-2 border">User Email</th>
               <th className="p-2 border">User address</th>
               <th className="p-2 border">Items</th>
@@ -45,6 +66,10 @@ const AdminOrders = () => {
             {orders.map((order) => (
               <tr key={order._id}>
                 <td className="p-2 border text-center">{order._id}</td>
+                <td className="p-2 border text-center">
+                  {order.supplier ? order.supplier.name : "No supplier"}
+                </td>
+
                 <td className="p-2 border text-center">{order.userEmail}</td>
                 <td className="p-2 border text-center">{order.address}</td>
                 <td className="p-2 border text-center">

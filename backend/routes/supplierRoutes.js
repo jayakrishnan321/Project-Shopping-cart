@@ -9,7 +9,8 @@ const { registersupllier,
     updateplaceanddistrict,
     fetchcurrentorders,
     sendOrderOTP,
-    verifyOrderOTP
+    verifyOrderOTP,
+    getsupplierforadmin
 } = require('../controllers/supplierController')
 const upload = require("../middleware/uploadprofile");
 
@@ -23,4 +24,5 @@ router.put('/update-details/:email', updateplaceanddistrict)
 router.get('/currentorders/:district/:place',fetchcurrentorders)
 router.post("/:id/send-otp", sendOrderOTP);
 router.put("/:id/verify-otp", verifyOrderOTP);
+router.get('/by-location/:district/:place',getsupplierforadmin)
 module.exports = router; 

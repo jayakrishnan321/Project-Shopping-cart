@@ -22,6 +22,7 @@ import SupplierChangePassword from './pages/Supplier/SupplierChangePassword';
 import SupplierAddDetails from './pages/Supplier/SupplierAddDetails';
 import AdminSupplierRequest from './pages/AdminSupplierRequest';
 import SupplierCurrentOrders from './pages/Supplier/SupplierCurrentOrders';
+import SupplierAllOrders from './pages/Supplier/SupplierAllOrders';
 function App() {
   return (
     <Router>
@@ -53,6 +54,7 @@ function App() {
         <Route path='/supplier/change-password' element={<SupplierChangePassword/>}/>
         <Route path='/supplier/addplacedetails' element={<SupplierAddDetails/>}/>
         <Route path='/supplier/currentorders' element={<SupplierCurrentOrders/>}/>
+        <Route path='/supplier/allorders' element={<SupplierAllOrders/>}/>
       </Routes>
     </Router>
   );

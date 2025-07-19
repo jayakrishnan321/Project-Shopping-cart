@@ -86,7 +86,7 @@ const handleRemoveImage = async () => {
           All Products
         </button>
          <button
-          onClick={() => navigate("/supplier/currentorders")}
+          onClick={() => navigate("/supplier/allorders")}
           className="text-sm bg-white text-blue-800 px-3 py-1 rounded hover:bg-blue-100 transition"
         >
           All orders
