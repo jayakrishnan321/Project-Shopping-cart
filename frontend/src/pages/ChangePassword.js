@@ -105,6 +105,12 @@ function ChangePasswordcomponent({ role }) {
         >
           Update Password
         </button>
+         <button
+        onClick={() => navigate(-1)}
+        className="flex mt-3 items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 active:scale-95 transition-transform duration-150"
+      >
+        ← Back
+      </button>
       </form>
     </div>
   );

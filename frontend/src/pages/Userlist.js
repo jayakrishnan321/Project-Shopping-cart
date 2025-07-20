@@ -38,6 +38,12 @@ function Userlist() {
 
   return (
     <div className="overflow-x-auto">
+       <button
+        onClick={() => navigate(-1)}
+        className="flex mt-3 items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 active:scale-95 transition-transform duration-150"
+      >
+        ← Back
+      </button>
       <table className="min-w-full border border-gray-300 mt-6">
         <thead className="bg-blue-600 text-white">
           <tr>

@@ -17,23 +17,23 @@ function SupplierAddDetails() {
             setPlace(supplierInfo.place || '');
         }
     }, [supplierInfo]);
-   const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    await dispatch(
-      updateSupplierDetails({
-        email: supplierInfo.email,
-        district,
-        place
-      })
-    ).unwrap(); // unwrap() ensures errors are caught in the try/catch
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            await dispatch(
+                updateSupplierDetails({
+                    email: supplierInfo.email,
+                    district,
+                    place
+                })
+            ).unwrap(); // unwrap() ensures errors are caught in the try/catch
 
-    alert("Details sent for admin approval!");
-    navigate("/supplier/dashboard"); // navigate to dashboard
-  } catch (err) {
-    alert(err || "Failed to update details");
-  }
-};
+            alert("Details sent for admin approval!");
+            navigate("/supplier/dashboard"); // navigate to dashboard
+        } catch (err) {
+            alert(err || "Failed to update details");
+        }
+    };
 
 
 
@@ -68,6 +68,13 @@ function SupplierAddDetails() {
                     Submit
                 </button>
             </form>
+            <button
+                onClick={() => navigate(-1)}
+                className="flex mt-3 items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 active:scale-95 transition-transform duration-150"
+            >
+                ← Back
+            </button>
+
         </div>
     )
 }

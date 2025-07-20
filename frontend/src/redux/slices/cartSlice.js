@@ -53,7 +53,17 @@ export const decreaseQuantity = createAsyncThunk(
     }
   }
 );
-
+export const removeitemcart=createAsyncThunk(
+    'cart/removeitem',
+    async({id},thunkAPI)=>{
+        try{
+             const res=await API.delete(`/cart/delete/${id}`)
+             return res.data
+        }catch(error){
+            return thunkAPI.rejectWithValue(error.response.data.message)
+        }
+    }
+)
 
 const cartSlice = createSlice({
     name: 'cart',

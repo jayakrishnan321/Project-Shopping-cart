@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const UserOrders = () => {
   const { userInfo } = useSelector((state) => state.user);
   const [orders, setOrders] = useState([]);
-
+const navigate=useNavigate()
   useEffect(() => {
     const fetchOrders = async () => {
       const res = await fetch(`http://localhost:5000/api/orders/user/${userInfo.email}`, {
@@ -19,6 +20,12 @@ const UserOrders = () => {
   return (
     <div className="p-4">
       <h2 className="text-2xl font-bold mb-4 text-center">Your Orders</h2>
+       <button
+        onClick={() => navigate(-1)}
+        className="flex mt-3 items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 active:scale-95 transition-transform duration-150"
+      >
+        ← Back
+      </button>
       {orders.length === 0 ? (
         <p className="text-center text-gray-500">No orders yet.</p>
       ) : (

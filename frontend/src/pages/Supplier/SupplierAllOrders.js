@@ -1,9 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { suppliercurrentorders } from "../../redux/slices/supplierSlice";
+import { useNavigate } from "react-router-dom";
 
 function SupplierAllOrders() {
   const dispatch = useDispatch();
+  const navigate=useNavigate()
   const { supplierInfo } = useSelector((state) => state.supplier);
 
   const [orders, setOrders] = useState([]);
@@ -32,6 +34,13 @@ function SupplierAllOrders() {
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <h1 className="text-2xl font-bold mb-4 text-gray-800">All Orders</h1>
+      <button
+        onClick={() => navigate(-1)}
+        className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 active:scale-95 transition-transform duration-150"
+      >
+        ← Back
+      </button>
+
 
       {orders.length === 0 ? (
         <p className="text-gray-500">No orders found.</p>

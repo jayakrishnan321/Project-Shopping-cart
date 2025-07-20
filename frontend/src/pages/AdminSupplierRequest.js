@@ -5,9 +5,11 @@ import {
   approveUpdate,
   rejectUpdate,
 } from "../redux/slices/authSlice";
+import { useNavigate } from "react-router-dom";
 
 function AdminSupplierRequest() {
   const dispatch = useDispatch();
+  const navigate=useNavigate()
   const { pendingUpdates, loading, error } = useSelector(
     (state) => state.auth
   );
@@ -37,7 +39,12 @@ function AdminSupplierRequest() {
       <h1 className="text-2xl font-bold mb-4 text-gray-800">
         Pending Supplier Place/District Updates
       </h1>
-
+      <button
+        onClick={() => navigate(-1)}
+        className="flex mt-3 items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 active:scale-95 transition-transform duration-150"
+      >
+        ← Back
+      </button>
       {loading && <p className="text-blue-500">Loading requests...</p>}
       {error && <p className="text-red-500">{error}</p>}
 

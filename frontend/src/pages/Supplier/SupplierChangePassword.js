@@ -9,11 +9,11 @@ function SupplierChangePassword() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const { supplierInfo} = useSelector((state) => state.supplier);
+  const { supplierInfo } = useSelector((state) => state.supplier);
 
   useEffect(() => {
     if (!supplierInfo || !supplierInfo.token) {
-      navigate( "/supplier/login");
+      navigate("/supplier/login");
     }
   }, [supplierInfo, navigate]);
 
@@ -35,9 +35,9 @@ function SupplierChangePassword() {
         newPassword,
       };
 
-        await dispatch(ChangePassword(payload)).unwrap();
+      await dispatch(ChangePassword(payload)).unwrap();
       alert("Password changed successfully!");
-      navigate( '/supplier/dashboard' );
+      navigate('/supplier/dashboard');
 
       setOldPassword("");
       setNewPassword("");
@@ -49,6 +49,8 @@ function SupplierChangePassword() {
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+     
+
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -57,7 +59,7 @@ function SupplierChangePassword() {
         className="bg-white p-6 rounded shadow-md w-full max-w-sm"
       >
         <h2 className="text-xl font-bold mb-4 text-center">
-         Supplier Change Password
+          Supplier Change Password
         </h2>
 
         <input
@@ -93,6 +95,12 @@ function SupplierChangePassword() {
         >
           Update Password
         </button>
+         <button
+        onClick={() => navigate(-1)}
+        className="flex mt-3 items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 active:scale-95 transition-transform duration-150"
+      >
+        ← Back
+      </button>
       </form>
     </div>
   );

@@ -96,12 +96,17 @@ console.log(adminInfo)
   };
 
   return (
-    <div className="p-4 min-h-screen bg-gray-50">
-  <div className="bg-blue-800 text-white px-6 py-4 rounded-md mb-6 shadow-md flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+   <div className="p-4 min-h-screen bg-gray-50">
+  {/* Top Header */}
+  <div className="bg-blue-800 text-white px-4 sm:px-6 py-4 rounded-md mb-6 shadow-md flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
     
+    {/* Left Section */}
     <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-      <h1 className="text-2xl font-bold tracking-wide">Admin Dashboard</h1>
-      <div className="flex gap-2 mt-1 sm:mt-0">
+      <h1 className="text-2xl font-bold tracking-wide text-center sm:text-left">
+        Admin Dashboard
+      </h1>
+      {/* Button Group */}
+      <div className="flex flex-wrap justify-center sm:justify-start gap-2">
         <button
           onClick={() => navigate("/admin/dashboard")}
           className="text-sm bg-white text-blue-800 px-3 py-1 rounded hover:bg-blue-100 transition"
@@ -120,13 +125,13 @@ console.log(adminInfo)
         >
           All Orders
         </button>
-          <button
+        <button
           onClick={() => navigate("/admin/suppliers")}
           className="text-sm bg-white text-blue-800 px-3 py-1 rounded hover:bg-blue-100 transition"
         >
           All Suppliers
         </button>
-          <button
+        <button
           onClick={() => navigate("/admin/pendingsuppliers")}
           className="text-sm bg-white text-blue-800 px-3 py-1 rounded hover:bg-blue-100 transition"
         >
@@ -136,18 +141,18 @@ console.log(adminInfo)
           onClick={() => navigate("/admin/supplierrequest")}
           className="text-sm bg-white text-blue-800 px-3 py-1 rounded hover:bg-blue-100 transition"
         >
-          All supplier Request
+          All Supplier Request
         </button>
       </div>
     </div>
 
-    {/* Right: Profile & Add Product */}
+    {/* Right Section */}
     {adminInfo && (
-      <div className="relative text-right">
+      <div className="relative text-center sm:text-right w-full sm:w-auto">
         {/* Profile Dropdown Trigger */}
         <button
           onClick={() => setDropdownOpen((prev) => !prev)}
-          className="bg-white text-blue-800 px-4 py-2 rounded shadow hover:bg-gray-100 transition"
+          className="bg-white text-blue-800 px-4 py-2 rounded shadow hover:bg-gray-100 transition w-full sm:w-auto"
         >
           {adminInfo.name}
         </button>
@@ -209,10 +214,10 @@ console.log(adminInfo)
         )}
 
         {/* Add Product Button */}
-        <div className="mt-3">
+        <div className="mt-3 sm:mt-2">
           <button
             onClick={() => navigate("/admin/add-product")}
-            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded transition"
+            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded transition w-full sm:w-auto"
           >
             ➕ Add Product
           </button>
@@ -241,7 +246,7 @@ console.log(adminInfo)
           <p className="text-green-600 font-bold text-sm mt-1">₹ {prod.price}</p>
           <p className="text-xs text-gray-500">Category: {prod.category}</p>
 
-          <div className="mt-3 flex justify-between gap-2">
+          <div className="mt-3 flex flex-col sm:flex-row justify-between gap-2">
             <button
               onClick={() => handleEdit(prod._id)}
               className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded"
@@ -260,6 +265,7 @@ console.log(adminInfo)
     </div>
   )}
 </div>
+
 
   );
 };

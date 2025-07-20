@@ -80,17 +80,19 @@ const decreaseQuantity = async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: 'Error decreasing quantity' });
   }
-};
-const deleteproduct = async (req, res) => {
+};const deleteproduct = async (req, res) => {
   try {
-    const { id } = req.params; // This is the item _id inside the items array
+    const { id } = req.params; // item._id from frontend
 
-    // Find the cart that contains this item and remove it from the items array
+    if (!id) {
+      return res.status(400).json({ message: "Item ID is required" });
+    }
+
     const cart = await Cart.findOneAndUpdate(
-      { 'items._id': id }, // Find cart with this item
-      { $pull: { items: { _id: id } } }, // Remove that item from items array
+      { "items._id": id },  // Find the cart that contains this item
+      { $pull: { items: { _id: id } } }, // Remove the item
       { new: true } // Return updated cart
-    ).populate('items.productId'); // Populate product details
+    ).populate("items.productId");
 
     if (!cart) {
       return res.status(404).json({ message: "Item not found in any cart" });

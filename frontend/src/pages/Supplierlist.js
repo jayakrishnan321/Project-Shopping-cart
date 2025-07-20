@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { supplierlist,supplierblock } from "../redux/slices/authSlice"
+import { useNavigate } from "react-router-dom";
 
 function Supplierlist() {
   const dispatch = useDispatch();
+  const navigate=useNavigate()
   const { suppliers, loading, error, adminInfo } = useSelector(
     (state) => state.auth
   );
@@ -26,7 +28,12 @@ function Supplierlist() {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Suppliers List</h1>
-
+        <button
+        onClick={() => navigate(-1)}
+        className="flex mt-3 items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 active:scale-95 transition-transform duration-150"
+      >
+        ← Back
+      </button>
       {loading && <p className="text-blue-500">Loading suppliers...</p>}
       {error && <p className="text-red-500">{error}</p>}
 

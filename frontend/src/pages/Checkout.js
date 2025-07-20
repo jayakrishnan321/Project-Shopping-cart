@@ -103,7 +103,7 @@ const Checkout = () => {
   return (
     <div className="max-w-xl mx-auto p-6 bg-white shadow mt-8">
       <h2 className="text-2xl font-bold mb-4 text-center">Checkout</h2>
-
+ 
       {/* Address Fields */}
       <div className="mb-4">
         <label className="block text-gray-700 font-semibold mb-1">House Name</label>
@@ -170,6 +170,12 @@ const Checkout = () => {
         className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded w-full"
       >
         Pay Now
+      </button>
+       <button
+        onClick={() => navigate(-1)}
+        className="flex mt-3 items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 active:scale-95 transition-transform duration-150"
+      >
+        ← Back
       </button>
     </div>
   );

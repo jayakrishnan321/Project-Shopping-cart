@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const AdminOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+const navigate=useNavigate()
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -26,6 +27,12 @@ const AdminOrders = () => {
   return (
     <div className="p-6">
       <h2 className="text-2xl font-bold mb-4">All Orders</h2>
+       <button
+        onClick={() => navigate(-1)}
+        className="flex mt-3 items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 active:scale-95 transition-transform duration-150"
+      >
+        ← Back
+      </button>
       <div className="overflow-x-auto">
         <table className="table-auto w-full border">
           <thead>
