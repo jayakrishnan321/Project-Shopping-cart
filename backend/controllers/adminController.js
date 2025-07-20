@@ -257,6 +257,7 @@ const getPendingUpdates = async (req, res) => {
 
     // Update status to pending
     supplier.status = 'pending';
+    supplier.pendingDetails=undefined
     await supplier.save();
 
     return res.status(200).json({ message: 'Supplier has been blocked', supplier });
