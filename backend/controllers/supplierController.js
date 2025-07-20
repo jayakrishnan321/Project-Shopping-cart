@@ -1,6 +1,6 @@
 const Supplier = require("../models/Supplier");
 const bcrypt = require("bcryptjs");
-const { sendsupplierOTP,sendAdminApprovalEmail,sendEmailToAdmin ,sendOTPorder} = require("../utils/sendOTP");
+const { sendsupplierOTP,sendAdminApprovalEmail,sendEmailToAdmin ,sendOTPorder,sendSuccesmessage} = require("../utils/sendOTP");
 const jwt = require('jsonwebtoken');
 const path = require("path");
 const Admin=require('../models/Admin')
@@ -218,7 +218,7 @@ const sendOrderOTP = async (req, res) => {
     const { id } = req.params;
     const order = await Order.findById(id);
     if (!order) return res.status(404).json({ message: "Order not found" });
-console.log(order)
+
     // Generate OTP
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     orderOTPStore[id] = { otp, expires: Date.now() + 5 * 60 * 1000 }; // Valid for 5 mins
@@ -257,7 +257,7 @@ const verifyOrderOTP = async (req, res) => {
   }
 };
 
-checkSupplierAvailability = async (req, res) => {
+const checkSupplierAvailability = async (req, res) => {
   try {
     const { district, place } = req.params;
 
@@ -281,9 +281,23 @@ checkSupplierAvailability = async (req, res) => {
   }
 };
 
+const sendsuccesmessage=async(req,res)=>{
+  try{
+   const id=req.params.id
+    const order = await Order.findById(id);
+    if (!order) return res.status(404).json({ message: "Order not found" });
 
+    await sendSuccesmessage(order.userEmail);
+
+    res.json({ message: "OTP sent to user's email" });
+  } catch (error) {
+    console.error("OTP sending error:", error);
+    res.status(500).json({ message: "Failed " });
+  }
+
+}
 
 module.exports = {
     registersupllier, verifyOTP, loginSupplier,addimage,removeProfileImage,ChangePassword,updateplaceanddistrict,fetchcurrentorders,
-    sendOrderOTP,verifyOrderOTP,checkSupplierAvailability
+    sendOrderOTP,verifyOrderOTP,checkSupplierAvailability,sendsuccesmessage
 }

@@ -91,6 +91,18 @@ export const verifyOrderOTP = createAsyncThunk(
     }
   }
 );
+export const sendsuccesmessage=createAsyncThunk(
+  "supplier/message",
+  async({id},thunkAPI)=>{
+    try{
+      const res=await API.post(`/supplier/successmessage/${id}`)
+      return res.data
+
+    }catch(error){
+      return thunkAPI.rejectWithValue(error.response?.data?.message||"failed to send succes message")
+    }
+  }
+)
 const initialState = {
   supplierInfo: JSON.parse(sessionStorage.getItem("supplierInfo")) || null,
   orders: [],

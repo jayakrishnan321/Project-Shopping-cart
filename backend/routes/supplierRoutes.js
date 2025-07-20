@@ -10,7 +10,8 @@ const { registersupllier,
     fetchcurrentorders,
     sendOrderOTP,
     verifyOrderOTP,
-    checkSupplierAvailability
+    checkSupplierAvailability,
+    sendsuccesmessage
 } = require('../controllers/supplierController')
 const upload = require("../middleware/uploadprofile");
 
@@ -25,5 +26,6 @@ router.get('/currentorders/:district/:place',fetchcurrentorders)
 router.post("/:id/send-otp", sendOrderOTP);
 router.put("/:id/verify-otp", verifyOrderOTP);
 router.get("/check/:district/:place", checkSupplierAvailability);
+router.post("/successmessage/:id",sendsuccesmessage)
 
 module.exports = router; 

@@ -16,7 +16,14 @@ const sendOTP = async (email, otp) => {
     text: `Your OTP is: ${otp}`,
   });
 };
-
+const sendSuccesmessage=async(email)=>{
+  await transporter.sendMail({
+    from:`"shopping cart" <${process.env.EMAIL_USER}>`,
+    to:email,
+    subject:'Delever message',
+    text:'your order is deleverd succesfully'
+  })
+}
 const usersendOTP = async (email, otp) => {
   await transporter.sendMail({
     from: `"Shopping Cart" <${process.env.EMAIL_USER}>`,
@@ -103,4 +110,4 @@ const sendOTPorder= async (to, otp, orderId = null) => {
 module.exports = { sendOTP };
 
 
-module.exports = { sendOTP, usersendOTP, sendsupplierOTP, sendAdminApprovalEmail ,sendEmailToAdmin,sendOTPorder};
+module.exports = { sendOTP, usersendOTP, sendsupplierOTP, sendAdminApprovalEmail ,sendEmailToAdmin,sendOTPorder,sendSuccesmessage};

@@ -1,11 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { suppliercurrentorders,sendOrderOTP,verifyOrderOTP } from '../../redux/slices/supplierSlice';
+import { suppliercurrentorders,sendOrderOTP,verifyOrderOTP,sendsuccesmessage } from '../../redux/slices/supplierSlice';
 
 function SupplierCurrentOrders() {
     const dispatch = useDispatch();
     const { supplierInfo } = useSelector((state) => state.supplier);
-
     const [orders, setOrders] = useState([]); // ✅ State for orders
       const fetchOrders = useCallback(async () => {
   try {
@@ -35,6 +34,7 @@ function SupplierCurrentOrders() {
     if (otp) {
       await dispatch(verifyOrderOTP({ id, otp })).unwrap(); // Step 2: Verify OTP
       alert("Order marked as Delivered!");
+      await dispatch(sendsuccesmessage({id})).unwrap();
       await fetchOrders(); // ✅ Re-fetch orders after status update
     }
   } catch (error) {
