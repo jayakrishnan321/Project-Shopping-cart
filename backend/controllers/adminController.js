@@ -245,7 +245,27 @@ const getPendingUpdates = async (req, res) => {
     console.error("Error fetching pending updates:", error);
     res.status(500).json({ message: "Server error" });
   }
+};const blocksupplier = async (req, res) => {
+  try {
+    const { email } = req.params;
+
+    // Find supplier by email
+    const supplier = await Supplier.findOne({ email });
+    if (!supplier) {
+      return res.status(404).json({ message: 'No supplier found' });
+    }
+
+    // Update status to pending
+    supplier.status = 'pending';
+    await supplier.save();
+
+    return res.status(200).json({ message: 'Supplier has been blocked', supplier });
+  } catch (error) {
+    console.error('Block supplier error:', error);
+    return res.status(500).json({ message: 'Server error' });
+  }
 };
+
 
 module.exports = {
   registerAdmin,
@@ -259,5 +279,5 @@ module.exports = {
   getPendingSuppliers,
   approveSupplier,
   rejectSupplier,
-  approveSupplierDetails,rejectSupplierDetails,getPendingUpdates
+  approveSupplierDetails,rejectSupplierDetails,getPendingUpdates,blocksupplier
 };

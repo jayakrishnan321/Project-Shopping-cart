@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { supplierlist } from "../redux/slices/authSlice" 
+import { supplierlist,supplierblock } from "../redux/slices/authSlice"
 
 function Supplierlist() {
   const dispatch = useDispatch();
@@ -14,6 +14,14 @@ function Supplierlist() {
       dispatch(supplierlist());
     }
   }, [dispatch, adminInfo]);
+  const handleBlock = async (email) => {
+  try {
+    const res = await dispatch(supplierblock({ email })).unwrap();
+    alert(res.message || "Supplier has been blocked successfully");
+  } catch (error) {
+    alert(error || "Failed to block supplier");
+  }
+};
 
   return (
     <div className="p-6">
@@ -31,6 +39,7 @@ function Supplierlist() {
               <th className="p-2 border">Email</th>
               <th className="p-2 border">Phone</th>
               <th className="p-2 border">Status</th>
+              <th className="p-2 border">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -49,6 +58,15 @@ function Supplierlist() {
                 <td className="p-2 border font-semibold">
                   {supplier.status}
                 </td>
+                <td className="p-2 border text-center">
+                  <button
+                    className="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded shadow-md transition duration-200"
+                    onClick={() => handleBlock(supplier.email)}
+                  >
+                    Block
+                  </button>
+                </td>
+
               </tr>
             ))}
           </tbody>

@@ -65,9 +65,18 @@ export const supplierlist = createAsyncThunk(
     }
   }
 );
+export const supplierblock=createAsyncThunk(
+  'admin/supplierbloc',
+  async({email},thunkAPI)=>{
+    try{
+           const res=await API.put(`/admin/block/${email}`)
+          return res.data
+    }catch(error){
+      return thunkAPI.rejectWithValue(error.response.data.message)
+    }
+  }
+)
 
-/* -------------------- SEPARATE PENDING SUPPLIERS -------------------- */
-// Pending Registrations
 export const fetchPendingRegistrations = createAsyncThunk(
   "admin/fetchPendingRegistrations",
   async (_, thunkAPI) => {

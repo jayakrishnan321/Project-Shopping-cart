@@ -13,7 +13,8 @@ const { registerAdmin,
    rejectSupplier,
    approveSupplierDetails,
    rejectSupplierDetails,
-   getPendingUpdates
+   getPendingUpdates,
+   blocksupplier
 } = require('../controllers/adminController');
 
 const upload = require("../middleware/uploadprofile");
@@ -39,5 +40,6 @@ router.get("/pending-updates", getPendingUpdates);
 router.put("/approve-update/:id", approveSupplierDetails);
 router.put("/reject-update/:id", rejectSupplierDetails);
 
+router.put("/block/:email",blocksupplier);
 module.exports = router;
 
