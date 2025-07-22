@@ -8,7 +8,7 @@ function SupplierAddDetails() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const { supplierInfo } = useSelector((state) => state.supplier)
-    console.log(supplierInfo)
+   
 
 
     useEffect(() => {

@@ -10,7 +10,8 @@ function Supplierdashboard() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { items, loading } = useSelector((state) => state.product);
   const { supplierInfo } = useSelector((state) => state.supplier);
-  console.log(supplierInfo)
+  console.log(supplierInfo.place)
+  
   useEffect(() => {
     if (!supplierInfo || !supplierInfo.token) {
       navigate('/supplier/login');
@@ -107,7 +108,8 @@ function Supplierdashboard() {
               onClick={() => navigate("/supplier/addplacedetails")}
               className="text-sm bg-white text-blue-800 px-3 py-1 rounded hover:bg-blue-100 transition"
             >
-              Add Place Details
+              {(supplierInfo.place&&supplierInfo.district)?"Update place Details":"Add Place Details"}
+            
             </button>
           </div>
         </div>
