@@ -16,6 +16,18 @@ export const ChangePassword = createAsyncThunk(
     }
   }
 );
+export const fetchplaceanddistrict=createAsyncThunk(
+  'supplier/changeplacedetails',
+  async({email},thunkAPI)=>{
+    try{
+    const res=await API.get(`/supplier/getplacedetails/${email}`)
+    return res.data
+    }catch(error){
+    
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+)
 export const addprofile = createAsyncThunk(
   "profile/image",
   async ({ data, email }, thunkAPI) => {

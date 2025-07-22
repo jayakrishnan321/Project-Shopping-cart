@@ -1,22 +1,26 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { updateSupplierDetails } from '../../redux/slices/supplierSlice'
+import { updateSupplierDetails, fetchplaceanddistrict } from '../../redux/slices/supplierSlice'
 function SupplierAddDetails() {
     const [district, setDistrict] = useState('')
     const [place, setPlace] = useState('')
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const { supplierInfo } = useSelector((state) => state.supplier)
-   
 
 
     useEffect(() => {
-        if (supplierInfo) {
-            setDistrict(supplierInfo.district || '');
-            setPlace(supplierInfo.place || '');
-        }
-    }, [supplierInfo]);
+        if (!supplierInfo) return;
+
+        (async () => {
+            const res = await dispatch(fetchplaceanddistrict({ email: supplierInfo.email })).unwrap();
+            setPlace(res.place);
+            setDistrict(res.district);
+            
+        })();
+    }, [supplierInfo, dispatch]);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -27,7 +31,7 @@ function SupplierAddDetails() {
                     place
                 })
             ).unwrap(); // unwrap() ensures errors are caught in the try/catch
-
+           
             alert("Details sent for admin approval!");
             navigate("/supplier/dashboard"); // navigate to dashboard
         } catch (err) {

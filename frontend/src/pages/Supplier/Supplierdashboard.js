@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { getProducts } from "../../redux/slices/productSlice";
-import { addprofile, removeProfile, setSupplierInfo, clearSupplierInfo } from '../../redux/slices/supplierSlice';
+import { addprofile, removeProfile, setSupplierInfo, clearSupplierInfo,fetchplaceanddistrict } from '../../redux/slices/supplierSlice';
 function Supplierdashboard() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -10,20 +10,30 @@ function Supplierdashboard() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { items, loading } = useSelector((state) => state.product);
   const { supplierInfo } = useSelector((state) => state.supplier);
-  console.log(supplierInfo.place)
-  
-  useEffect(() => {
+  const [district,setDistrict]=useState('')
+  const [place,setPlace]=useState('')
+  console.log(district)
+ useEffect(() => {
     if (!supplierInfo || !supplierInfo.token) {
       navigate('/supplier/login');
     } else {
       try {
         dispatch(getProducts());
+        dispatch(fetchplaceanddistrict({ email: supplierInfo.email }))
+      .unwrap()
+      .then((res) => {
+        
+        setPlace(res.place)
+        setDistrict(res.district)
+    
+      })
       } catch (err) {
         console.error("Error fetching products:", err);
         navigate('/supplier/login');
       }
     }
-  }, [supplierInfo, dispatch, navigate]);
+  }, [supplierInfo, dispatch, navigate]);  
+
 
   const handleChange = (e) => {
     setImageFile(e.target.files[0]);
@@ -108,7 +118,7 @@ function Supplierdashboard() {
               onClick={() => navigate("/supplier/addplacedetails")}
               className="text-sm bg-white text-blue-800 px-3 py-1 rounded hover:bg-blue-100 transition"
             >
-              {(supplierInfo.place&&supplierInfo.district)?"Update place Details":"Add Place Details"}
+              {(place&&district)?"Update place Details":"Add Place Details"}
             
             </button>
           </div>

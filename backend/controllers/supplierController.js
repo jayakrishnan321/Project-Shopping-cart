@@ -149,8 +149,7 @@ const loginSupplier = async (req, res) => {
                email: supplier.email,
                 name: supplier.name,
                 image:supplier.image,
-                district:supplier.district,
-                place:supplier.place
+               
                 
              },
             process.env.JWT_SECRET,
@@ -296,8 +295,20 @@ const sendsuccesmessage=async(req,res)=>{
   }
 
 }
+const getplaceanddistrict=async(req,res)=>{
+  try{
+    const email=req.params.email
+    const supplier=await Supplier.findOne({
+      email:email
+    })
+    res.status(200).json(supplier);
+
+  }catch(error){
+    res.status(500).json({message:'failed'})
+  }
+}
 
 module.exports = {
     registersupllier, verifyOTP, loginSupplier,addimage,removeProfileImage,ChangePassword,updateplaceanddistrict,fetchcurrentorders,
-    sendOrderOTP,verifyOrderOTP,checkSupplierAvailability,sendsuccesmessage
+    sendOrderOTP,verifyOrderOTP,checkSupplierAvailability,sendsuccesmessage,getplaceanddistrict
 }

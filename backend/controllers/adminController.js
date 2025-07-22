@@ -150,8 +150,7 @@ const Supplierlist = async (req, res) => {
 }
 const getPendingSuppliers = async (req, res) => {
   try {
-    const suppliers = await Supplier.find({ status: "pending" }); // Only pending suppliers
-    console.log(suppliers)
+    const suppliers = await Supplier.find({ status: "pending" }); 
     res.json(suppliers);
   } catch (error) {
     console.error("Error fetching pending suppliers:", error);

@@ -11,7 +11,8 @@ const { registersupllier,
     sendOrderOTP,
     verifyOrderOTP,
     checkSupplierAvailability,
-    sendsuccesmessage
+    sendsuccesmessage,
+    getplaceanddistrict
 } = require('../controllers/supplierController')
 const upload = require("../middleware/uploadprofile");
 
@@ -27,5 +28,5 @@ router.post("/:id/send-otp", sendOrderOTP);
 router.put("/:id/verify-otp", verifyOrderOTP);
 router.get("/check/:district/:place", checkSupplierAvailability);
 router.post("/successmessage/:id",sendsuccesmessage)
-
+router.get("/getplacedetails/:email",getplaceanddistrict)
 module.exports = router; 
