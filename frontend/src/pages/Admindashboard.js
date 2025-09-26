@@ -237,7 +237,7 @@ console.log(adminInfo)
           className="border-[2px] border-gray-300 bg-white p-4 shadow rounded-lg transition hover:shadow-lg"
         >
           <img
-            src={`http://localhost:5000${prod.image}`}
+            src={`${process.env.REACT_APP_API_URL}${prod.image}`}
             alt={prod.name}
             className="w-full h-44 object-contain bg-gray-100 rounded"
           />
