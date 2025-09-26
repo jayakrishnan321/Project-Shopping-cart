@@ -162,7 +162,7 @@ console.log(adminInfo)
           <div className="absolute right-0 mt-2 w-56 bg-white border rounded shadow z-20 text-black">
             <div className="flex flex-col items-center p-3 relative group">
               <img
-                src={`http://localhost:5000${adminInfo.image}`}
+                src={`${process.env.REACT_APP_API_URL}${adminInfo.image}`}
                 alt="No Profile"
                 className="w-20 h-20 rounded-full object-cover border"
               />

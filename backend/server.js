@@ -15,8 +15,8 @@ const supplierRoutes=require("./routes/supplierRoutes")
 
 app.use(cors())
 app.use(express.json())
-app.use("/uploads", express.static("uploads")); // Access images via /uploads/filename.jpg
-app.use('/profile', express.static('profile'));
+app.use("/api/uploads", express.static("uploads")); // Access images via /uploads/filename.jpg
+app.use('/api/profile', express.static('profile'));
 
 
 app.use("/api/admin", adminRoutes);

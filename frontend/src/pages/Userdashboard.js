@@ -109,7 +109,7 @@ function Userdashboard() {
           <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow z-10 text-black">
             <div className="flex flex-col items-center p-2 relative group">
               <img
-                src={`http://localhost:5000${userInfo.image}`}
+                src={`${process.env.REACT_APP_API_URL}${userInfo.image}`}
                 alt="No Profile"
                 className="w-20 h-20 rounded-full object-cover border"
               />
