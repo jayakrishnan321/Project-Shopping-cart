@@ -23,7 +23,7 @@ function Login({ role }) {
   }
 
   try {
-    const endpoint = isAdmin ? '/api/admin/login' : '/api/user/login';
+    const endpoint = isAdmin ? '/admin/login' : '/user/login';
    const res = await API.post(endpoint, form);
     alert(res.data.message);
 
