@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import API from '../api';
 import { useDispatch } from 'react-redux';
 import { setAdminInfo } from '../redux/slices/authSlice'; 
 import { setUserInfo } from '../redux/slices/userSlice';
@@ -24,7 +24,7 @@ function Login({ role }) {
 
   try {
     const endpoint = isAdmin ? '/api/admin/login' : '/api/user/login';
-    const res = await axios.post(`http://localhost:5000${endpoint}`, form);
+   const res = await API.post(endpoint, form);
     alert(res.data.message);
 
     const token = res.data.token;
