@@ -34,9 +34,8 @@ const Checkout = () => {
 
   // **Check supplier availability first**
   try {
-    const res = await axios.get(
-      `${process.env.REACT_APP_API_URL}supplier/check/${district}/${city}`
-    );
+   const res = await api.get(`/supplier/check/${district}/${city}`);
+
 
     if (!res.data.success) {
       alert(res.data.message || "No supplier available in your area");
