@@ -62,7 +62,7 @@ function Userlist() {
               <td className="py-2 px-4 border">{user.email}</td>
               <td className="py-2 px-4 border">
                 <img
-                  src={`http://localhost:5000${user.image}`}
+                  src={`${process.env.REACT_APP_API_URL}${user.image}`}
                   alt="Profile"
                   className="w-12 h-12 object-cover rounded-full mx-auto"
                 />

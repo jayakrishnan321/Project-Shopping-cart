@@ -64,7 +64,7 @@ const navigate=useNavigate()
                       className="flex gap-2 items-center text-center mb-1"
                     >
                       <img
-                        src={`http://localhost:5000${item.image}`}
+                        src={`${process.env.REACT_APP_API_URL}${item.image}`}
                         alt={item.name}
                         className="w-12 h-12 object-cover"
                       />

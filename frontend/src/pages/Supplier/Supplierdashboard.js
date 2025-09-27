@@ -12,7 +12,7 @@ function Supplierdashboard() {
   const { supplierInfo } = useSelector((state) => state.supplier);
   const [district,setDistrict]=useState('')
   const [place,setPlace]=useState('')
-  console.log(district)
+ 
  useEffect(() => {
     if (!supplierInfo || !supplierInfo.token) {
       navigate('/supplier/login');

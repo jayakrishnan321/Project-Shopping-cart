@@ -8,6 +8,7 @@ function SupplierCurrentOrders() {
   const navigate=useNavigate()
   const { supplierInfo } = useSelector((state) => state.supplier);
   const [orders, setOrders] = useState([]); // ✅ State for orders
+  console.log(supplierInfo)
   const fetchOrders = useCallback(async () => {
     try {
       const res = await dispatch(

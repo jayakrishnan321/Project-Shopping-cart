@@ -7,7 +7,7 @@ function SupplierAllOrders() {
   const dispatch = useDispatch();
   const navigate=useNavigate()
   const { supplierInfo } = useSelector((state) => state.supplier);
-
+console.log(supplierInfo)
   const [orders, setOrders] = useState([]);
 
   const fetchOrders = useCallback(async () => {
