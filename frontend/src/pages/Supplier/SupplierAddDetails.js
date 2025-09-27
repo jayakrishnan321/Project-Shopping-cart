@@ -5,6 +5,7 @@ import { updateSupplierDetails, fetchplaceanddistrict } from '../../redux/slices
 function SupplierAddDetails() {
     const [district, setDistrict] = useState('')
     const [place, setPlace] = useState('')
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const { supplierInfo } = useSelector((state) => state.supplier)
@@ -17,12 +18,15 @@ function SupplierAddDetails() {
             const res = await dispatch(fetchplaceanddistrict({ email: supplierInfo.email })).unwrap();
             setPlace(res.place);
             setDistrict(res.district);
-            
+
         })();
     }, [supplierInfo, dispatch]);
 
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true); // start loading
+
         try {
             await dispatch(
                 updateSupplierDetails({
@@ -30,14 +34,17 @@ function SupplierAddDetails() {
                     district,
                     place
                 })
-            ).unwrap(); // unwrap() ensures errors are caught in the try/catch
-           
+            ).unwrap();
+
             alert("Details sent for admin approval!");
-            navigate("/supplier/dashboard"); // navigate to dashboard
+            navigate("/supplier/dashboard"); // navigate after success
         } catch (err) {
             alert(err || "Failed to update details");
+        } finally {
+            setLoading(false); // stop loading
         }
     };
+
 
 
 
@@ -67,10 +74,12 @@ function SupplierAddDetails() {
                 </div>
                 <button
                     type="submit"
-                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                    disabled={loading}
+                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
                 >
-                    Submit
+                    {loading ? "Submitting..." : "Submit"}
                 </button>
+
             </form>
             <button
                 onClick={() => navigate(-1)}
