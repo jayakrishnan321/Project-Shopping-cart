@@ -35,7 +35,7 @@ const Checkout = () => {
   // **Check supplier availability first**
   try {
     const res = await axios.get(
-      `http://localhost:5000/api/supplier/check/${district}/${city}`
+      `${process.env.REACT_APP_API_URL}supplier/check/${district}/${city}`
     );
 
     if (!res.data.success) {
