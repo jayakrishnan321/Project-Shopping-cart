@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { suppliercurrentorders, sendOrderOTP, verifyOrderOTP, sendsuccesmessage } from '../../redux/slices/supplierSlice';
+import { suppliercurrentorders, sendOrderOTP, verifyOrderOTP, sendsuccesmessage,fetchplaceanddistrict  } from '../../redux/slices/supplierSlice';
 import { useNavigate } from 'react-router-dom';
 
 function SupplierCurrentOrders() {
