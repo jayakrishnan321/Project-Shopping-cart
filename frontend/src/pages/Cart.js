@@ -77,7 +77,7 @@ const handleRemove = async (id) => {
       className="border border-gray-300 rounded-lg p-4 shadow-md"
     >
       <img
-        src={`http://localhost:5000${item.productId.image}`}
+        src={`${process.env.REACT_APP_API_URL}${item.productId.image}`}
         alt={item.productId.name}
         className="w-full h-40 object-contain bg-gray-100 rounded mb-3"
       />
