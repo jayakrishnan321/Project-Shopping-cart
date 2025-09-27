@@ -15,7 +15,7 @@ const UserOrders = () => {
         },
       });
 
-      const data = await res.json();
+      const data = res.data;
       setOrders(data);
     };
     fetchOrders();
