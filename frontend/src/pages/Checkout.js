@@ -7,7 +7,7 @@ import API from '../api';
 const Checkout = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const {id}=useParams()
+  const { id } = useParams()
 
   const { userInfo } = useSelector((state) => state.user);
   const { items } = useSelector((state) => state.cart);
@@ -25,74 +25,78 @@ const Checkout = () => {
     : items.reduce(
       (acc, item) => acc + Number(item.productId.price) * Number(item.quantity),
       0
-    );const handlePayment = async () => {
-  if (!houseName || !postOffice || !city || !district || !pincode) {
-    alert("Please fill all address details");
-    return;
-  }
+    ); const handlePayment = async () => {
+      if (!houseName || !postOffice || !city || !district || !pincode) {
+        alert("Please fill all address details");
+        return;
+      }
 
-  const fullAddress = `${houseName}, ${postOffice}, ${city}, ${district}, ${pincode}`;
+      const fullAddress = `${houseName}, ${postOffice}, ${city}, ${district}, ${pincode}`;
 
-  // **Check supplier availability first**
-  try {
-   const res = await API.get(`/supplier/check/${district}/${city}`);
+      // **Check supplier availability first**
+      try {
+        const res = await API.get(`/supplier/check/${district}/${city}`);
 
 
-    if (!res.data.success) {
-      alert(res.data.message || "No supplier available in your area");
-      return; // Stop payment
-    }
-  } catch (err) {
-    alert("Delivery not available for your address");
-    return;
-  }
+        if (!res.data.success) {
+          alert(res.data.message || "No supplier available in your area");
+          return; // Stop payment
+        }
+      } catch (err) {
+        alert("Delivery not available for your address");
+        return;
+      }
 
-  const amountInPaise = totalPrice * 100;
+      const amountInPaise = totalPrice * 100;
 
-  const options = {
-    key: process.env.REACT_APP_RAZORPAY_KEY_ID,
-    amount: amountInPaise,
-    currency: "INR",
-    name: "Shopping Payment",
-    description: "Order Payment",
-    handler: async function (response) {
-      const orderData = {
-        userEmail: userInfo.email,
-        items: buyNowItem ? [buyNowItem] : items,
-        address: fullAddress,
-        totalPrice,
-        paymentId: response.razorpay_payment_id,
+      const options = {
+        key: process.env.REACT_APP_RAZORPAY_KEY_ID,
+        amount: amountInPaise,
+        currency: "INR",
+        name: "Shopping Payment",
+        description: "Order Payment",
+        handler: async function (response) {
+          const orderData = {
+            userEmail: userInfo.email,
+            items: buyNowItem ? [buyNowItem] : items,
+            address: fullAddress,
+            totalPrice,
+            paymentId: response.razorpay_payment_id,
+          };
+
+          try {
+            const res = await API.post(
+              "/orders/create",
+              orderData,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${userInfo.token}`,
+                },
+              }
+            );
+
+            await API.delete(`/cart/delete/${id}`);
+
+            alert("Payment Successful! Your order has been placed.");
+            navigate("/user/orders");
+          } catch (err) {
+            console.error(err);
+            alert("Order saving failed");
+          }
+        },
+        prefill: {
+          name: userInfo.name,
+          email: userInfo.email,
+        },
+        theme: {
+          color: "#3399cc",
+        },
       };
 
-      try {
-        await fetch("http://localhost:5000/api/orders/create", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${userInfo.token}`,
-          },
-          body: JSON.stringify(orderData),
-        });
-        await axios.delete(`http://localhost:5000/api/cart/delete/${id}`);
-        alert("Payment Successful! Your order has been placed.");
-        navigate("/user/orders");
-      } catch (err) {
-        console.error(err);
-        alert("Order saving failed");
-      }
-    },
-    prefill: {
-      name: userInfo.name,
-      email: userInfo.email,
-    },
-    theme: {
-      color: "#3399cc",
-    },
-  };
-
-  const rzp = new window.Razorpay(options);
-  rzp.open();
-};
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    };
 
   useEffect(() => {
     if (!userInfo || !userInfo.token) {
@@ -103,7 +107,7 @@ const Checkout = () => {
   return (
     <div className="max-w-xl mx-auto p-6 bg-white shadow mt-8">
       <h2 className="text-2xl font-bold mb-4 text-center">Checkout</h2>
- 
+
       {/* Address Fields */}
       <div className="mb-4">
         <label className="block text-gray-700 font-semibold mb-1">House Name</label>
@@ -171,7 +175,7 @@ const Checkout = () => {
       >
         Pay Now
       </button>
-       <button
+      <button
         onClick={() => navigate(-1)}
         className="flex mt-3 items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 active:scale-95 transition-transform duration-150"
       >

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import API from "../api";
 
 const AdminOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -10,7 +11,7 @@ const navigate=useNavigate()
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/orders");
+        const res = await API.get("/orders")
         setOrders(res.data); // Orders already have supplier details
         setLoading(false);
       } catch (err) {

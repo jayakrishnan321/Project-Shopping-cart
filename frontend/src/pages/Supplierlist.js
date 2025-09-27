@@ -54,7 +54,7 @@ function Supplierlist() {
               <tr key={supplier._id} className="text-center">
                 <td className="p-2 border">
                   <img
-                    src={`http://localhost:5000${supplier.image}`}
+                    src={`${process.env.REACT_APP_API_URL}${supplier.image}`}
                     alt={supplier.name}
                     className="w-12 h-12 rounded-full object-cover mx-auto"
                   />
