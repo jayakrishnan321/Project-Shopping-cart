@@ -19,6 +19,7 @@ console.log(supplierInfo)
         })
       ).unwrap();
       setOrders(res);
+      console.log(orders)
       console.log("Fetched Orders:", res);
     } catch (error) {
       console.error("Failed to fetch orders:", error);
