@@ -71,6 +71,7 @@ export const suppliercurrentorders = createAsyncThunk(
   async ({ place, district }, thunkAPI) => {
     try {
       const res = await API.get(`/supplier/currentorders/${district}/${place}`);
+      console.log("API Response:", res.data);
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(
