@@ -1,61 +1,69 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { suppliercurrentorders, sendOrderOTP, verifyOrderOTP, sendsuccesmessage,fetchplaceanddistrict  } from '../../redux/slices/supplierSlice';
+import { suppliercurrentorders, sendOrderOTP, verifyOrderOTP, sendsuccesmessage, fetchplaceanddistrict } from '../../redux/slices/supplierSlice';
 import { useNavigate } from 'react-router-dom';
 
 function SupplierCurrentOrders() {
   const dispatch = useDispatch();
-  const navigate=useNavigate()
-      const [district, setDistrict] = useState('')
-      const [place, setPlace] = useState('')
+  const navigate = useNavigate();
   const { supplierInfo } = useSelector((state) => state.supplier);
-  const [orders, setOrders] = useState([]); // ✅ State for orders
-  console.log(supplierInfo)
-    useEffect(() => {
-          if (!supplierInfo) return;
-  
-          (async () => {
-              const res = await dispatch(fetchplaceanddistrict({ email: supplierInfo.email })).unwrap();
-              setPlace(res.place);
-              setDistrict(res.district);
-  
-          })();
-      }, [supplierInfo, dispatch]);
-  const fetchOrders = useCallback(async () => {
-    try {
-      const res = await dispatch(
-        suppliercurrentorders({
-          place: place,
-          district: district,
-        })
-      ).unwrap();
-      setOrders(res);
-      console.log("Fetched Orders:", res);
-    } catch (error) {
-      console.error("Failed to fetch orders:", error);
-    }
-  }, [dispatch, place,district]);
-  useEffect(() => {
-    if (place && district) {
-      fetchOrders();
-    }
-  }, [fetchOrders, supplierInfo.place, supplierInfo.district]);
 
+  const [district, setDistrict] = useState("");
+  const [place, setPlace] = useState("");
+  const [orders, setOrders] = useState([]);
+
+  // 1️⃣ Fetch place and district once supplierInfo is available
+  useEffect(() => {
+    if (!supplierInfo) return;
+
+    const fetchLocation = async () => {
+      try {
+        const res = await dispatch(fetchplaceanddistrict({ email: supplierInfo.email })).unwrap();
+        setPlace(res.place);
+        setDistrict(res.district);
+      } catch (err) {
+        console.error("Failed to fetch place/district:", err);
+      }
+    };
+
+    fetchLocation();
+  }, [supplierInfo, dispatch]);
+
+  // 2️⃣ Fetch orders only after place and district are set
+  useEffect(() => {
+    if (!place || !district) return;
+
+    const fetchOrders = async () => {
+      try {
+        const res = await dispatch(suppliercurrentorders({ place, district })).unwrap();
+        setOrders(res);
+        console.log("Fetched Orders:", res);
+      } catch (err) {
+        console.error("Failed to fetch orders:", err);
+      }
+    };
+
+    fetchOrders();
+  }, [place, district, dispatch]);
+
+  // 3️⃣ Deliver order function
   const handleDeliver = async (id) => {
     try {
-      await dispatch(sendOrderOTP(id)).unwrap(); // Step 1: Send OTP
+      await dispatch(sendOrderOTP(id)).unwrap();
       const otp = prompt("Enter the OTP sent to the user's email:");
-
       if (otp) {
-        await dispatch(verifyOrderOTP({ id, otp })).unwrap(); // Step 2: Verify OTP
+        await dispatch(verifyOrderOTP({ id, otp })).unwrap();
         alert("Order marked as Delivered!");
         await dispatch(sendsuccesmessage({ id })).unwrap();
-        await fetchOrders(); // ✅ Re-fetch orders after status update
+        // Refresh orders
+        const res = await dispatch(suppliercurrentorders({ place, district })).unwrap();
+        setOrders(res);
       }
     } catch (error) {
       alert(error || "Failed to deliver order");
     }
   };
+
 
   return (
     <div className="p-6">
