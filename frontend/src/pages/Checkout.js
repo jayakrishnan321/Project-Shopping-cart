@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
+import API from '../api';
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ const Checkout = () => {
 
   // **Check supplier availability first**
   try {
-   const res = await api.get(`/supplier/check/${district}/${city}`);
+   const res = await API.get(`/supplier/check/${district}/${city}`);
 
 
     if (!res.data.success) {
