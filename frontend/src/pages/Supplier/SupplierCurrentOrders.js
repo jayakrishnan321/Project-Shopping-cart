@@ -6,15 +6,27 @@ import { useNavigate } from 'react-router-dom';
 function SupplierCurrentOrders() {
   const dispatch = useDispatch();
   const navigate=useNavigate()
+      const [district, setDistrict] = useState('')
+      const [place, setPlace] = useState('')
   const { supplierInfo } = useSelector((state) => state.supplier);
   const [orders, setOrders] = useState([]); // ✅ State for orders
   console.log(supplierInfo)
+    useEffect(() => {
+          if (!supplierInfo) return;
+  
+          (async () => {
+              const res = await dispatch(fetchplaceanddistrict({ email: supplierInfo.email })).unwrap();
+              setPlace(res.place);
+              setDistrict(res.district);
+  
+          })();
+      }, [supplierInfo, dispatch]);
   const fetchOrders = useCallback(async () => {
     try {
       const res = await dispatch(
         suppliercurrentorders({
-          place: supplierInfo.place,
-          district: supplierInfo.district,
+          place: place,
+          district: district,
         })
       ).unwrap();
       setOrders(res);
@@ -22,9 +34,9 @@ function SupplierCurrentOrders() {
     } catch (error) {
       console.error("Failed to fetch orders:", error);
     }
-  }, [dispatch, supplierInfo.place, supplierInfo.district]);
+  }, [dispatch, place,district]);
   useEffect(() => {
-    if (supplierInfo?.place && supplierInfo?.district) {
+    if (place && district) {
       fetchOrders();
     }
   }, [fetchOrders, supplierInfo.place, supplierInfo.district]);
