@@ -231,14 +231,16 @@ const fetchallorders = async (req, res) => {
 
 const sendOrderOTP = async (req, res) => {
   try {
+    console.log("entered to backend")
     const { id } = req.params;
+
     const order = await Order.findById(id);
     if (!order) return res.status(404).json({ message: "Order not found" });
-
+    console.log("order ",order)
     // Generate OTP
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     orderOTPStore[id] = { otp, expires: Date.now() + 5 * 60 * 1000 }; // Valid for 5 mins
-
+    console.log('otp generated',otp)
     // Send OTP to user's email
     await sendOTPorder(order.userEmail, otp);
 

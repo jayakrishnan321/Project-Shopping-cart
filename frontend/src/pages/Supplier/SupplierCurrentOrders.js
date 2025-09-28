@@ -48,6 +48,7 @@ function SupplierCurrentOrders() {
 
   // 3️⃣ Deliver order function
   const handleDeliver = async (id) => {
+    console.log("button pressed")
     try {
       await dispatch(sendOrderOTP(id)).unwrap();
       const otp = prompt("Enter the OTP sent to the user's email:");

@@ -98,6 +98,7 @@ export const sendOrderOTP = createAsyncThunk(
   "supplier/sendOrderOTP",
   async (id, thunkAPI) => {
     try {
+      console.log("ented to supplier slice page")
       const res = await API.post(`/supplier/${id}/send-otp`);
       return res.data;
     } catch (error) {
