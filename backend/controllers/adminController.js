@@ -27,7 +27,8 @@ const registerAdmin = async (req, res) => {
     data: { name, email, phone, password },
     expires: Date.now() + 300000,
   };
-
+ 
+  
   await sendOTP(email, otp);
   res.status(200).json({ message: "OTP sent to email" });
 };
