@@ -1,9 +1,7 @@
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.mailgun.org",
-  port: 587,
-  secure: true, 
+  service: "gmail",
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
@@ -12,13 +10,7 @@ const transporter = nodemailer.createTransport({
     rejectUnauthorized: false, // helps in some cloud setups
   },
 });
-transporter.verify((err, success) => {
-  if (err) {
-    console.log("SMTP Connection Error:", err);
-  } else {
-    console.log("SMTP Connection Success");
-  }
-});
+
 const sendOTP = async (email, otp) => {
   await transporter.sendMail({
     from: `"Ecommerce App" <${process.env.EMAIL_USER}>`,
