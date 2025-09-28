@@ -203,6 +203,7 @@ const fetchcurrentorders = async (req, res) => {
     // Find orders where the address contains BOTH place and district
     const orders = await Order.find({
       address: { $regex: new RegExp(`${place}.*${district}`, "i") },
+      status:"Processing"
     });
 
     res.status(200).json(orders);
@@ -255,16 +256,21 @@ const verifyOrderOTP = async (req, res) => {
     res.status(500).json({ message: "Failed to verify OTP" });
   }
 };
-
 const checkSupplierAvailability = async (req, res) => {
   try {
-    const { district, place } = req.params;
+    const district = req.params.district.trim();
+    const place = req.params.place.trim();
+
+    console.log("District param:", `"${district}"`);
+    console.log("Place param:", `"${place}"`);
 
     const supplier = await Supplier.findOne({
       place: new RegExp(`^${place}$`, "i"),
       district: new RegExp(`^${district}$`, "i"),
       status: "approved",
     });
+
+    console.log("Supplier found:", supplier);
 
     if (!supplier) {
       return res.status(404).json({
@@ -279,6 +285,7 @@ const checkSupplierAvailability = async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
 
 const sendsuccesmessage=async(req,res)=>{
   try{

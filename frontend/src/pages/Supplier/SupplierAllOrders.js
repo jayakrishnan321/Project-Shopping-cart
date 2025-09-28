@@ -1,21 +1,43 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { suppliercurrentorders } from "../../redux/slices/supplierSlice";
+import { suppliercurrentorders,fetchplaceanddistrict } from "../../redux/slices/supplierSlice";
 import { useNavigate } from "react-router-dom";
 
 function SupplierAllOrders() {
   const dispatch = useDispatch();
   const navigate=useNavigate()
   const { supplierInfo } = useSelector((state) => state.supplier);
-console.log(supplierInfo)
   const [orders, setOrders] = useState([]);
+  const [district,setDistrict]=useState('')
+    const [place,setPlace]=useState('')
+    
+  useEffect(() => {
+      if (!supplierInfo || !supplierInfo.token) {
+        navigate('/supplier/login');
+      } else {
+        try {
+          dispatch(fetchplaceanddistrict({ email: supplierInfo.email }))
+        .unwrap()
+        .then((res) => {
+          
+          setPlace(res.place)
+          setDistrict(res.district)
+      
+        })
+        } catch (err) {
+          console.error("Error fetching products:", err);
+          navigate('/supplier/login');
+        }
+      }
+    }, [supplierInfo, dispatch, navigate]);  
+
 
   const fetchOrders = useCallback(async () => {
     try {
       const res = await dispatch(
         suppliercurrentorders({
-          place: supplierInfo.place,
-          district: supplierInfo.district,
+          place:place,
+          district:district,
         })
       ).unwrap();
       setOrders(res);
@@ -24,13 +46,13 @@ console.log(supplierInfo)
     } catch (error) {
       console.error("Failed to fetch orders:", error);
     }
-  }, [dispatch, supplierInfo.place, supplierInfo.district]);
+  }, [dispatch, place,district]);
 
   useEffect(() => {
-    if (supplierInfo?.place && supplierInfo?.district) {
+    if (place && district) {
       fetchOrders();
     }
-  }, [fetchOrders, supplierInfo.place, supplierInfo.district]);
+  }, [fetchOrders, place,district]);
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">

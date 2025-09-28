@@ -134,6 +134,7 @@ const removeProfileImage = async (req, res) => {
 const Userlist = async (req, res) => {
   try {
     const users = await User.find()
+    console.log(users)
     return res.json(users)
   } catch (err) {
     console.log('cannot fetch user list')
