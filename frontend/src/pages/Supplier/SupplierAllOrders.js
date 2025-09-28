@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { suppliercurrentorders,fetchplaceanddistrict } from "../../redux/slices/supplierSlice";
+import { supplierallorders,fetchplaceanddistrict } from "../../redux/slices/supplierSlice";
 import { useNavigate } from "react-router-dom";
 
 function SupplierAllOrders() {
@@ -35,7 +35,7 @@ function SupplierAllOrders() {
   const fetchOrders = useCallback(async () => {
     try {
       const res = await dispatch(
-        suppliercurrentorders({
+        supplierallorders({
           place:place,
           district:district,
         })

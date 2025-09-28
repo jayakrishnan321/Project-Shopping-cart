@@ -12,7 +12,8 @@ const { registersupllier,
     verifyOrderOTP,
     checkSupplierAvailability,
     sendsuccesmessage,
-    getplaceanddistrict
+    getplaceanddistrict,
+    fetchallorders
 } = require('../controllers/supplierController')
 const upload = require("../middleware/uploadprofile");
 
@@ -24,6 +25,7 @@ router.put("/remove-image/:email", removeProfileImage);
 router.post("/changepassword/:email", ChangePassword)
 router.put('/update-details/:email', updateplaceanddistrict)
 router.get('/currentorders/:district/:place',fetchcurrentorders)
+router.get('/allorders/:district/:place',fetchallorders)
 router.post("/:id/send-otp", sendOrderOTP);
 router.put("/:id/verify-otp", verifyOrderOTP);
 router.get("/check/:district/:place", checkSupplierAvailability);

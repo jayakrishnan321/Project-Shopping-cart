@@ -80,6 +80,20 @@ export const suppliercurrentorders = createAsyncThunk(
     }
   }
 );
+export const supplierallorders = createAsyncThunk(
+  "supplier/currentorders", // typePrefix (required)
+  async ({ place, district }, thunkAPI) => {
+    try {
+      const res = await API.get(`/supplier/allorders/${district}/${place}`);
+      console.log("API Response:", res.data);
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to fetch"
+      );
+    }
+  }
+);
 export const sendOrderOTP = createAsyncThunk(
   "supplier/sendOrderOTP",
   async (id, thunkAPI) => {

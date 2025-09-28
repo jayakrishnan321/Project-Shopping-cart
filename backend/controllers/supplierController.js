@@ -212,6 +212,22 @@ const fetchcurrentorders = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+const fetchallorders = async (req, res) => {
+  try {
+    const { place, district } = req.params;
+
+    // Find orders where the address contains BOTH place and district
+    const orders = await Order.find({
+      address: { $regex: new RegExp(`${place}.*${district}`, "i") },
+      
+    });
+
+    res.status(200).json(orders);
+  } catch (err) {
+    console.error("Fetch current orders error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
 const sendOrderOTP = async (req, res) => {
   try {
@@ -317,5 +333,5 @@ const getplaceanddistrict=async(req,res)=>{
 
 module.exports = {
     registersupllier, verifyOTP, loginSupplier,addimage,removeProfileImage,ChangePassword,updateplaceanddistrict,fetchcurrentorders,
-    sendOrderOTP,verifyOrderOTP,checkSupplierAvailability,sendsuccesmessage,getplaceanddistrict
+    sendOrderOTP,verifyOrderOTP,checkSupplierAvailability,sendsuccesmessage,getplaceanddistrict,fetchallorders
 }
