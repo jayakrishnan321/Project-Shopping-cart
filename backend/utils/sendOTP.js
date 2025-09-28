@@ -10,7 +10,13 @@ const transporter = nodemailer.createTransport({
     rejectUnauthorized: false, // helps in some cloud setups
   },
 });
-
+transporter.verify((err, success) => {
+  if (err) {
+    console.log("SMTP Connection Error:", err);
+  } else {
+    console.log("SMTP Connection Success");
+  }
+});
 const sendOTP = async (email, otp) => {
   await transporter.sendMail({
     from: `"Ecommerce App" <${process.env.EMAIL_USER}>`,
