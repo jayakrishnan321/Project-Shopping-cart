@@ -3,7 +3,7 @@ const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
   host:"smtp.mailgun.org",
   port:587,
-  secure:true,
+  secure:false,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
@@ -100,6 +100,10 @@ const sendOTPorder= async (to, otp, orderId = null) => {
       ? `Dear Customer,\n\nYour delivery OTP for order #${orderId} is: ${otp}.\n\nPlease share this OTP with the delivery agent to confirm delivery.\n\nThank you for shopping with us!`
       : `Your OTP code is: ${otp}`;
 console.log(message)
+console.log(to)
+console.log(process.env.EMAIL_USER)
+console.log(process.env.EMAIL_PASS)
+
     await transporter.sendMail({
       from: `"Ecommerce App" <${process.env.EMAIL_USER}>`,
       to,
