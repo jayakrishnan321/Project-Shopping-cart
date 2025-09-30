@@ -98,7 +98,7 @@ function Userdashboard() {
         </div>
 
         {/* Right Dropdown */}
-        {userInfo && (
+        {userInfo ?(
           <div className="relative w-full sm:w-auto text-center sm:text-right">
             <button
               onClick={() => setDropdownOpen((prev) => !prev)}
@@ -161,6 +161,15 @@ function Userdashboard() {
               </div>
             )}
           </div>
+        ):
+        (
+          <button
+              onClick={()=>navigate('/user/login')}
+              className="bg-white text-blue-800 px-4 py-2 rounded shadow hover:bg-gray-100 transition w-full sm:w-auto"
+            >
+              Login
+            </button>
+
         )}
       </div>
 
@@ -185,7 +194,7 @@ function Userdashboard() {
               <p className="text-xs text-gray-500 mb-2">Category: {prod.category}</p>
 
               <button
-                onClick={() => AddCart(prod._id, userInfo.email)}
+               onClick={() => userInfo ? AddCart(prod._id, userInfo.email) : navigate('/user/login')}
                 className="bg-blue-600 text-white w-full py-2 rounded hover:bg-blue-700 transition"
               >
                 🛒 Add to Cart
