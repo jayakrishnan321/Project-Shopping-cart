@@ -55,6 +55,17 @@ const Register = ({role}) => {
             className="w-full px-4 py-2 border rounded"
           />
         ))}
+       <div className="mt-4 text-center">
+  <p className="text-sm text-gray-600">
+    Already have an account?{" "}
+    <a
+      href={isAdmin ? "/admin/login" : "/user/login"}
+      className="text-blue-600 font-medium hover:underline hover:text-blue-800 transition-colors"
+    >
+      Log in
+    </a>
+  </p>
+</div>
 
         <button type="submit" className="bg-blue-600 text-white w-full py-2 rounded hover:bg-blue-700">Register</button>
 

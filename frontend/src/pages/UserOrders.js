@@ -25,7 +25,7 @@ const UserOrders = () => {
     <div className="p-4">
       <h2 className="text-2xl font-bold mb-4 text-center">Your Orders</h2>
       <button
-        onClick={() => navigate(-1)}
+        onClick={() => navigate("/user/dashboard")}
         className="flex mt-3 items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 active:scale-95 transition-transform duration-150"
       >
         ← Back

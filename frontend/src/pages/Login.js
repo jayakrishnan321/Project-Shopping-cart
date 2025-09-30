@@ -86,6 +86,16 @@ function Login({ role }) {
         >
           Login
         </button>
+        <p className="text-sm text-gray-600">
+  Don&apos;t have an account?{" "}
+  <a
+    href={isAdmin ? "/admin/register" : "/"}
+    className="text-blue-600 font-medium hover:underline hover:text-blue-800 transition-colors"
+  >
+    Sign up
+  </a>
+</p>
+
       </div>
     </div>
   );
